@@ -15,6 +15,11 @@ import { FilesModule } from './files/files.module';
       password: process.env.DATABASE_PASSWORD,
       database: process.env.DATABASE_NAME,
       autoLoadEntities: true,
+      migrationsTableName: 'migration_table',
+      migrations: ['src/db/migrations/*.ts'],
+      cli: {
+        migrationsDir: 'src/db/migrations'
+      }
     }),
     FilesModule,
     UsersModule,
