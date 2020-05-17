@@ -10,5 +10,4 @@ async function bootstrap() {
 }
 bootstrap().finally(() => {
   console.log('success');
-  }
-);
+});
