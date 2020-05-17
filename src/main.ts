@@ -9,5 +9,5 @@ async function bootstrap() {
   console.info(`Application is running on: ${await app.getUrl()}`);
 }
 bootstrap().finally(() => {
-  console.log('success');
+  console.info('Success');
 });
