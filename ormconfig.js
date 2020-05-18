@@ -21,5 +21,5 @@ module.exports = {
     entitiesDir: 'src',
     migrationsDir: 'migrations',
     subscribersDir: 'subscriber'
-  },
+  }
 };
