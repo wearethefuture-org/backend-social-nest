@@ -15,19 +15,24 @@ export class UsersController {
 
   @Post()
   @ApiCreatedResponse({
-    description: 'The record has been successfully created.',
-    type: User,
+    type: User
   })
   public create(@Body() createUserDto: CreateUserDto): Promise<User> {
     return this.usersService.create(createUserDto);
   }
 
   @Get()
+  @ApiCreatedResponse({
+    type: [User]
+  })
   public findAll(): Promise<User[]> {
     return this.usersService.findAll();
   }
 
   @Get(':id')
+  @ApiCreatedResponse({
+    type: [User]
+  })
   public findOne(@Param('id') id: string): Promise<User> {
     return this.usersService.findOne(id);
   }
