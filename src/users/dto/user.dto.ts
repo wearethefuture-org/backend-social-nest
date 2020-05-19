@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString } from 'class-validator';
+import { IsString, IsInt, IsBoolean } from 'class-validator';
 
 export class CreateUserDto {
   @ApiProperty({
@@ -58,6 +58,7 @@ export class GetUserDto {
     required: true,
     default: 30,
   })
+  @IsInt()
   public limit: number;
 
   @ApiProperty({
@@ -65,6 +66,7 @@ export class GetUserDto {
     required: true,
     default: 0
   })
+  @IsInt()
   public offset: number;
 
   @ApiProperty({
@@ -78,4 +80,12 @@ export class GetUserDto {
     default: 'ASC'
   })
   public direction: string;
+
+  @ApiProperty({
+    type: Boolean,
+    required: false,
+    default: true
+  })
+  @IsBoolean()
+  public onlyUsers: boolean;
 }
