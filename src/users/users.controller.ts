@@ -1,9 +1,12 @@
-import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
+import { Body, Controller, Delete, Get, Param, Post, Query } from '@nestjs/common';
+import { CreateUserDto, GetUserDto } from './dto/user.dto';
 import { User } from './user.entity';
 import { UsersService } from './users.service';
 import { DeleteResult } from 'typeorm/query-builder/result/DeleteResult';
-import { ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiCreatedResponse,
+  ApiTags
+} from '@nestjs/swagger';
 
 @ApiTags('Users')
 @Controller('users')
@@ -25,7 +28,7 @@ export class UsersController {
   @ApiCreatedResponse({
     type: [User]
   })
-  public findAll(): Promise<User[]> {
+  public findAll(@Query() getUserDto: GetUserDto): Promise<User[]> {
     return this.usersService.findAll();
   }
 

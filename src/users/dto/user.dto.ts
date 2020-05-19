@@ -42,3 +42,31 @@ export class CreateUserDto {
   @ApiProperty()
   public birthdayDate: Date;
 }
+
+export class GetUserDto {
+  @ApiProperty({
+    type: Number,
+    required: true,
+    default: 30,
+  })
+  public limit: number;
+
+  @ApiProperty({
+    type: Number,
+    required: true,
+    default: 0
+  })
+  public offset: number;
+
+  @ApiProperty({
+    required: false,
+    default: 'id'
+  })
+  public sortField: string;
+
+  @ApiProperty({
+    required: false,
+    default: 'ASC'
+  })
+  public direction: string;
+}
