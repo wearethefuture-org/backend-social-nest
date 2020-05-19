@@ -14,13 +14,7 @@ export class UsersService {
   }
 
   public async create(createUserDto: CreateUserDto): Promise<User> {
-    const user = new User();
-
-    user.firstName = createUserDto.firstName;
-    user.lastName = createUserDto.lastName;
-    user.email = createUserDto.email;
-
-    return this.usersRepository.save(user);
+    return this.usersRepository.save(createUserDto);
   }
 
   public async findAll(): Promise<User[]> {

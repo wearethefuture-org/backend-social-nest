@@ -63,6 +63,49 @@ export class User {
   @ApiProperty()
   public email: string;
 
+  @Column({
+    name: 'password',
+  })
+  @ApiProperty()
+  public password: string;
+
+  @Column({
+    name: 'status',
+    enum: ['pending', 'confirmed', 'invited'],
+    insert: true,
+    default: 'pending'
+  })
+  @ApiProperty({
+    enum: ['pending', 'confirmed', 'invited']
+  })
+  public status: string;
+
+  @Column({
+    name: 'role',
+    enum: ['user', 'admin', 'superadmin'],
+    insert: true,
+    default: 'user'
+  })
+  @ApiProperty({
+    enum: ['user', 'admin', 'superadmin']
+  })
+  public role: string;
+
+  @Column({
+    name: 'disabled',
+    type: 'boolean',
+    insert: true,
+    default: false
+  })
+  @ApiProperty()
+  public disabled: boolean;
+
+  @Column({
+    name: 'birthday_date',
+  })
+  @ApiProperty()
+  public birthdayDate: Date;
+
   @CreateDateColumn({
     name: 'created_at',
   })

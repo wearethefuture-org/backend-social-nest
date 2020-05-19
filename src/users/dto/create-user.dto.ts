@@ -15,4 +15,30 @@ export class CreateUserDto {
     required: true,
   })
   public email: string;
+
+  @ApiProperty({
+    required: true,
+  })
+  public userName: string;
+
+  @ApiProperty({
+    required: true,
+  })
+  public password: string;
+
+  @ApiProperty({
+    enum: ['pending', 'confirmed', 'invited']
+  })
+  public status: string;
+
+  @ApiProperty({
+    enum: ['user', 'admin', 'superadmin']
+  })
+  public role: string;
+
+  @ApiProperty()
+  public disabled: boolean;
+
+  @ApiProperty()
+  public birthdayDate: Date;
 }
