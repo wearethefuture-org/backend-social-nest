@@ -5,8 +5,13 @@ import { ValidationError } from 'class-validator/types/validation/ValidationErro
 
 @Injectable()
 export class ValidationPipe implements PipeTransform<any> {
+  static toValidate(metatype: Function): boolean {
+    const types: Function[] = [String, Boolean, Number, Array, Object];
+    return !types.includes(metatype);
+  }
+
   async transform(value: any, { metatype }: ArgumentMetadata) {
-    if (!metatype || !this.toValidate(metatype)) {
+    if (!metatype || !ValidationPipe.toValidate(metatype)) {
       return value;
     }
     const object = plainToClass(metatype, value);
@@ -55,8 +60,6 @@ export class ValidationPipe implements PipeTransform<any> {
         if (error.value === 'true') {
           object[error.property] = true;
           value[error.property] = true;
-
-          continue;
         }
       }
     }
@@ -65,10 +68,5 @@ export class ValidationPipe implements PipeTransform<any> {
     errors = await validate(object);
 
     return {errors, value};
-  }
-
-  private toValidate(metatype: Function): boolean {
-    const types: Function[] = [String, Boolean, Number, Array, Object];
-    return !types.includes(metatype);
   }
 }
