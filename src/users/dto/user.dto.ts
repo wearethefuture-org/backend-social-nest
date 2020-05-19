@@ -1,29 +1,35 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { IsString } from 'class-validator';
 
 export class CreateUserDto {
   @ApiProperty({
     required: true,
   })
+  @IsString()
   public firstName: string;
 
   @ApiProperty({
     required: true,
   })
+  @IsString()
   public lastName: string;
 
   @ApiProperty({
     required: true,
   })
+  @IsString()
   public email: string;
 
   @ApiProperty({
     required: true,
   })
+  @IsString()
   public userName: string;
 
   @ApiProperty({
     required: true,
   })
+  @IsString()
   public password: string;
 
   @ApiProperty({
@@ -39,7 +45,10 @@ export class CreateUserDto {
   @ApiProperty()
   public disabled: boolean;
 
-  @ApiProperty()
+  @ApiProperty({
+    required: true,
+  })
+  @IsString()
   public birthdayDate: Date;
 }
 
