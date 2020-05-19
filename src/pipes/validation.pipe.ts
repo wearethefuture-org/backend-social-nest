@@ -20,7 +20,7 @@ export class ValidationPipe implements PipeTransform<any> {
 
       if (customResponse.errors && customResponse.errors.length) {
 
-        throw new BadRequestException(errors);
+        throw new BadRequestException(customResponse.errors);
       }
 
       return customResponse.value;
