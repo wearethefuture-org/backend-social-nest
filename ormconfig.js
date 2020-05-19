@@ -11,8 +11,10 @@ module.exports = {
     `${__dirname}/dist/**/*.entity.js`
   ],
   migrations: [
-    `${__dirname}/migrations/**/*.ts`,
+    `${__dirname}/src/db/migrations/**/*.ts`,
   ],
+  seeds: [`${__dirname}/src/db/seeds/**/*.ts`],
+  factories: [`${__dirname}/src/db/factories/**/*.ts`],
   subscribers: [
     `${__dirname}/subscriber/**/*.ts`,
     `${__dirname}/dist/subscriber/**/.js`,

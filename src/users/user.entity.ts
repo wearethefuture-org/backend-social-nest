@@ -22,7 +22,7 @@ export class User {
   public avatarId: number;
 
   @OneToOne(
-    type => File,
+    () => File,
     file => file,
     {
       eager: true,

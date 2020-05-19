@@ -4,7 +4,7 @@ import { plainToClass } from 'class-transformer';
 import { ValidationError } from 'class-validator/types/validation/ValidationError';
 
 @Injectable()
-export class ValidationPipe implements PipeTransform<any> {
+export class ValidationPipe implements PipeTransform {
   static toValidate(metatype: Function): boolean {
     const types: Function[] = [String, Boolean, Number, Array, Object];
     return !types.includes(metatype);
