@@ -35,7 +35,7 @@ export default class CreateUsers implements Seeder {
     ];
 
     for(const user of users) {
-      await factory(User)().create(user)
+      await factory(User)().create(user);
     }
   }
 }

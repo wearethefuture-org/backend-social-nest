@@ -18,7 +18,7 @@ export class User {
   @ApiProperty()
   public id: number;
 
-  @RelationId((user: User) => user.avatar, 'users_avatar_id_fkey')
+  @RelationId((user: User) => user.avatar)
   @ApiProperty()
   public avatarId: number;
 
