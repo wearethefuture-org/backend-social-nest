@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString, IsInt, IsBoolean } from 'class-validator';
+import { IsString, IsInt, IsBoolean, IsEmail, IsNumber } from 'class-validator';
 
 export class CreateUserDto {
   @ApiProperty()
@@ -11,7 +11,7 @@ export class CreateUserDto {
   public lastName: string;
 
   @ApiProperty()
-  @IsString()
+  @IsEmail()
   public email: string;
 
   @ApiProperty()
@@ -20,54 +20,51 @@ export class CreateUserDto {
 
   @ApiProperty()
   @IsString()
-  public password: string;
-
-  @ApiProperty({
-    enum: ['pending', 'confirmed', 'invited']
-  })
-  public status: string;
-
-  @ApiProperty({
-    enum: ['user', 'admin', 'superadmin']
-  })
-  public role: string;
+  public birthdayDate: Date;
 
   @ApiProperty()
   @IsString()
-  public birthdayDate: Date;
+  public password: string;
 
   @ApiProperty({
-    required: false
+    enum: ['pending', 'confirmed', 'invited'],
   })
-  public disabled: boolean;
+  @IsString()
+  public status?: string = 'pending';
+
+  @ApiProperty({
+    enum: ['user', 'admin', 'superadmin'],
+  })
+  @IsString()
+  public role?: string = 'user';
+
+  @ApiProperty()
+  @IsBoolean()
+  public disabled?: boolean = false;
 }
 
 export class GetUserDto {
-  @ApiProperty({
-    default: 30
-  })
-  @IsInt()
+  @ApiProperty()
+  @IsNumber()
   public limit: number;
 
-  @ApiProperty({
-    default: 0
-  })
+  @ApiProperty()
   @IsInt()
-  public offset: number;
+  public offset?: number = 0;
+
+  @ApiProperty()
+  @IsString()
+  public sortField?: string = 'id';
 
   @ApiProperty({
-    default: 'id'
+    enum: ['ASC', 'DSC']
   })
-  public sortField: string;
+  @IsString()
+  public direction?: string = 'ASC';
 
   @ApiProperty({
-    default: 'ASC'
-  })
-  public direction: string;
-
-  @ApiProperty({
-    default: true
+    enum: [true, false]
   })
   @IsBoolean()
-  public onlyUsers: boolean;
+  public onlyUsers?: boolean = true;
 }
