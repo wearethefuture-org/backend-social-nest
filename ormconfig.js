@@ -7,19 +7,23 @@ module.exports = {
   database: process.env.DATABASE_NAME,
   synchronize: true,
   entities: [
-    `${__dirname}/src/**/*.entity.ts`,
-    `${__dirname}/dist/**/*.entity.js`
+    `${__dirname}/src/**/*.entity.ts`
   ],
   migrations: [
-    `${__dirname}/migrations/**/*.ts`,
+    `${__dirname}/database/migrations/**/*.ts`
+  ],
+  seeds: [
+    `${__dirname}/database/seeds/**/*.ts`
+  ],
+  factories: [
+    `${__dirname}/database/factories/**/*.ts`
   ],
   subscribers: [
-    `${__dirname}/subscriber/**/*.ts`,
-    `${__dirname}/dist/subscriber/**/.js`,
+    `${__dirname}/database/subscribers/**/*.ts`
   ],
   cli: {
     entitiesDir: 'src',
-    migrationsDir: 'migrations',
-    subscribersDir: 'subscriber'
+    migrationsDir: 'database/migrations',
+    subscribersDir: 'database/subscriber'
   }
 };
