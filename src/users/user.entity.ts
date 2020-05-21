@@ -10,6 +10,7 @@ import {
 } from 'typeorm';
 import { File } from '../files/file.entity';
 import { ApiProperty } from '@nestjs/swagger';
+import { UserRoleEnum, UserStatusEnum } from './user.enum';
 
 @Entity({ name: 'users' })
 export class User {
@@ -37,7 +38,7 @@ export class User {
 
   @Column({
     name: 'first_name',
-    nullable: false,
+    nullable: false
   })
   @ApiProperty()
   public firstName: string;
@@ -63,37 +64,34 @@ export class User {
   @ApiProperty()
   public email: string;
 
-  @Column({
-    name: 'password',
-  })
+  @Column()
   @ApiProperty()
   public password: string;
 
   @Column({
     name: 'status',
-    enum: ['pending', 'confirmed', 'invited'],
+    enum: UserStatusEnum,
     insert: true,
-    default: 'pending'
+    default: UserStatusEnum.pending
   })
   @ApiProperty({
-    enum: ['pending', 'confirmed', 'invited']
+    enum: UserStatusEnum
   })
   public status: string;
 
   @Column({
     name: 'role',
-    enum: ['user', 'admin', 'superadmin'],
+    enum: UserRoleEnum,
     insert: true,
-    default: 'user'
+    default: UserRoleEnum.user
   })
   @ApiProperty({
-    enum: ['user', 'admin', 'superadmin']
+    enum: UserRoleEnum
   })
   public role: string;
 
   @Column({
     name: 'disabled',
-    type: 'boolean',
     insert: true,
     default: false
   })
@@ -101,19 +99,19 @@ export class User {
   public disabled: boolean;
 
   @Column({
-    name: 'birthday_date',
+    name: 'birthday_date'
   })
   @ApiProperty()
   public birthdayDate: Date;
 
   @CreateDateColumn({
-    name: 'created_at',
+    name: 'created_at'
   })
   @ApiProperty()
   public createdAt: Date;
 
   @UpdateDateColumn({
-    name: 'updated_at',
+    name: 'updated_at'
   })
   @ApiProperty()
   public updatedAt: Date;
