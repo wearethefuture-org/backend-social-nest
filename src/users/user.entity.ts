@@ -17,7 +17,7 @@ export class User {
   @ApiProperty()
   public id: number;
 
-  @RelationId((user: User) => user.avatar)
+  @RelationId((user: User) => user.avatar, 'users_avatar_id_fkey')
   @ApiProperty()
   public avatarId: number;
 
@@ -27,7 +27,7 @@ export class User {
     {
       eager: true,
       nullable: true,
-    },
+    }
   )
   @JoinColumn({
     name: 'avatar_id',
