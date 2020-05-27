@@ -3,6 +3,7 @@ import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from './users/users.module';
 import { FilesModule } from './files/files.module';
+import { AppGateway } from './app.gateway';
 
 @Module({
   imports: [
@@ -18,6 +19,8 @@ import { FilesModule } from './files/files.module';
     }),
     FilesModule,
     UsersModule,
-  ]
+  ],
+  controllers: [],
+  providers: [AppGateway],
 })
 export class AppModule {}
