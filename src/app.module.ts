@@ -3,7 +3,7 @@ import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from './users/users.module';
 import { FilesModule } from './files/files.module';
-import { AppGateway } from './app.gateway';
+import { ChatsModule } from './chats/chats.module';
 
 @Module({
   imports: [
@@ -19,8 +19,9 @@ import { AppGateway } from './app.gateway';
     }),
     FilesModule,
     UsersModule,
+    ChatsModule,
   ],
   controllers: [],
-  providers: [AppGateway],
+  providers: [],
 })
 export class AppModule {}
