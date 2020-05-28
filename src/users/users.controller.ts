@@ -1,14 +1,18 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, Query, UseGuards } from '@nestjs/common';
 import { CreateUserDto, GetUserDto } from './dto/user.dto';
 import { User } from './user.entity';
 import { UsersService } from './users.service';
 import { DeleteResult } from 'typeorm/query-builder/result/DeleteResult';
 import {
+  ApiBearerAuth,
   ApiCreatedResponse,
-  ApiTags
+  ApiTags,
 } from '@nestjs/swagger';
 import { UpdateResult } from 'typeorm/query-builder/result/UpdateResult';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 
+@ApiBearerAuth()
+@UseGuards(JwtAuthGuard)
 @ApiTags('Users')
 @Controller('users')
 export class UsersController {

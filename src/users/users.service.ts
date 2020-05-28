@@ -33,4 +33,8 @@ export class UsersService {
   public async delete(id: number): Promise<DeleteResult> {
     return this.usersRepository.delete(id);
   }
+
+  public async getUserByEmail(email: string): Promise<User> {
+    return this.usersRepository.findOne({ email });
+  }
 }

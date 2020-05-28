@@ -4,6 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from './users/users.module';
 import { FilesModule } from './files/files.module';
 import { ChatsModule } from './chats/chats.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { ChatsModule } from './chats/chats.module';
       database: process.env.DATABASE_NAME,
       autoLoadEntities: true
     }),
+    AuthModule,
     FilesModule,
     UsersModule,
     ChatsModule,
