@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DeleteResult, Repository, UpdateResult} from 'typeorm';
+import { DeleteResult, Repository, UpdateResult, Not, Equal, getRepository } from 'typeorm';
 import { Chats } from './chats.entity';
-import { CreateChatsDto} from './dto/chats.dto';
+import { CreateChatsDto, GetChatsDto } from './dto/chats.dto';
 
 
 @Injectable()
@@ -17,20 +17,16 @@ export class ChatsService {
     return this.chatsRepository.save(createChatsDto);
   }
 
-  public async find(): Promise<Chats[]> {
-    return this.chatsRepository.find();
-  }
 
- /* public async find(getChatsDto: GetChatsDto): Promise<Chats[]> {
+/*  public async find(getChatsDto: GetChatsDto): Promise<Chats[]> {
+    const chats = await getRepository(Chats)
+      .createQueryBuilder("chats")
+      .limit(30)
+      .offset(0)
+      .getMany();
     const { limit = 30, offset = 0, isGlobal = true } = getChatsDto;
     const where = isGlobal ? {} : { ownerId: Not(Equal(null)) };
-    return this.chatsRepository.find(
-      {
-        where,
-        limit,
-        offset,
-      }
-    );
+    return this.chatsRepository.find();
   }*/
 
   public async findOne(id: number): Promise<Chats> {

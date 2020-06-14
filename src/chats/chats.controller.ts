@@ -34,9 +34,9 @@ export class ChatsController {
   @ApiCreatedResponse({
     type: Chats
   })
-  public find(@Query() getChatsDto: GetChatsDto): Promise<Chats[]> {
+  /*public find(@Query() getChatsDto: GetChatsDto): Promise<Chats[]> {
     return this.chatsService.find();
-  }
+  }*/
 
   @Get(':id')
   @ApiCreatedResponse({
