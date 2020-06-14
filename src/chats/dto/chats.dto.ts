@@ -26,7 +26,7 @@ export class GetChatsDto {
 
   @ApiProperty()
   @IsBoolean()
-  public isGlobal?: boolean = true;
+  public isGlobal?: boolean = false;
 
 }
 
