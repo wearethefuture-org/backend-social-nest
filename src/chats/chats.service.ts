@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DeleteResult, Repository, UpdateResult, Not, Equal } from 'typeorm';
+import { DeleteResult, Repository, UpdateResult, Not, IsNull } from 'typeorm';
 import { Chats } from './chats.entity';
 import { CreateChatsDto, GetChatsDto } from './dto/chats.dto';
 
@@ -17,10 +17,8 @@ export class ChatsService {
     return this.chatsRepository.save(createChatsDto);
   }
 
-
   public async find(getChatsDto: GetChatsDto): Promise<Chats[]> {
-    const where = getChatsDto.isGlobal ? {} : { ownerId: Not(Equal(null)) };
-    console.log(getChatsDto.isGlobal);
+    const where = getChatsDto.isGlobal ? {} : { ownerId: Not(IsNull()) };
     return this.chatsRepository.find({
       skip: getChatsDto.offset,
       take: getChatsDto.limit,

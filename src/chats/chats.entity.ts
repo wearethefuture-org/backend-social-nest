@@ -67,7 +67,8 @@ export class Chats {
 
   @Column({
     name: 'owner_id',
-    insert: true
+    nullable: true,
+    insert: true,
   })
   @ApiProperty()
   public ownerId: number;
