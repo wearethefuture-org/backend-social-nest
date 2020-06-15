@@ -4,13 +4,19 @@ import {
   PrimaryGeneratedColumn,
   RelationId,
   OneToOne,
+  OneToMany,
+  ManyToMany,
   JoinColumn,
+  JoinTable,
   CreateDateColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { File } from '../files/file.entity';
+import { Message } from '../messages/messages.entity'
+import { Chat } from '../chats/chats.entity'
 import { ApiProperty } from '@nestjs/swagger';
 import { UserRoleEnum, UserStatusEnum } from './user.enum';
+import { fromEventPattern } from 'rxjs';
 
 @Entity({ name: 'users' })
 export class User {
@@ -38,7 +44,7 @@ export class User {
 
   @Column({
     name: 'first_name',
-    nullable: false
+    nullable: false,
   })
   @ApiProperty()
   public firstName: string;
@@ -115,4 +121,11 @@ export class User {
   })
   @ApiProperty()
   public updatedAt: Date;
+
+  @OneToMany(() => Message, (message: Message) => message.user)
+    messages: Message[];
+
+  @ManyToMany(type => Chat)
+  @JoinTable()
+  categories: Chat[];
 }
