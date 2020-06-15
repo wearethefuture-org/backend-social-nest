@@ -6,7 +6,6 @@ import { Chat } from './chats.entity';
 import { DeleteResult } from 'typeorm/query-builder/result/DeleteResult';
 import { UpdateResult } from 'typeorm/query-builder/result/UpdateResult';
 import { User } from 'src/users/user.entity';
-import { File } from 'src/files/file.entity';
 
 @Injectable()
 export class ChatsService {

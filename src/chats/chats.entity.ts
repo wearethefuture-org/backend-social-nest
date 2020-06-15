@@ -33,37 +33,33 @@ export class Chat {
   @ApiProperty()
   public description: string;
 
-  @ManyToOne((type:any) => User)
-  @JoinColumn()
-  owner: User;
-
-
-
-  // @OneToOne(
-  //   () => File,
-  //   file => file,
-  //   {
-  //     eager: true,
-  //     nullable: true,
-  //   }
-  // )
-  // @JoinColumn({
-  //   name: 'avatar_id',
-  // })
-
   @Column({
     default: true
   })
   @ApiProperty()
   public available: boolean;
 
-  @RelationId((chat: Chat) => chat.owner)
-  @ApiProperty()
-  public owner_id: number;
+  @ManyToOne(() => User, (user: User) => user.id, {
+    eager: true
+  })
+  @JoinColumn({name: 'owner_id'})
+  public owner: User;
 
   @Column()
-  @ApiProperty()
+  public owner_id: number;
+
+  @ManyToOne(() => User, (user: User) => user.id, {
+    eager: true
+  })
+  @JoinColumn({name: 'partner_id'})
+  public partner: User;
+
+  @Column()
   public partner_id: number;
+
+  @OneToMany(() => Message, (message: Message) => message.chat_id)
+  @JoinColumn({name: 'id'})
+  public messages: Message[];
 
   @CreateDateColumn({
     name: 'created_at'
@@ -76,7 +72,4 @@ export class Chat {
   })
   @ApiProperty()
   public updatedAt: Date;
-
-  @OneToMany(() => Message, (message: Message) => message.chat)
-    messages: Message[];
 }

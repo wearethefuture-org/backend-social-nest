@@ -26,7 +26,7 @@ export class ChatsController {
     type: Chat
   })
   public create(@Body() createChatDto: CreateChatDto, @Request() req) : Promise<Chat> {
-    return this.chatService.create(345345, createChatDto);
+    return this.chatService.create(req.user.id, createChatDto);
   }
 
   @Get()

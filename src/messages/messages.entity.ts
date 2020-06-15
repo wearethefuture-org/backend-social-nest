@@ -14,28 +14,26 @@ export class Message {
   @ApiProperty()
   public text: string;
 
-  // @RelationId((message: Message) => message.user)
-  // @ApiProperty()
-  // public userId: number;
-
   @ManyToOne(() => User, (user: User) => user.messages)
-    user: User;
-  @JoinColumn({ 
-    name: 'user_id', 
-  })
-  // public user: User[];
+  @JoinColumn({name: 'user_id'})
+  public user: User;
+
+  @Column()
+  public user_id: number;
 
   @ManyToOne(() => Chat, (chat: Chat) => chat.messages)
-    chat: Chat;
-  @JoinColumn({ 
-    name: 'chat_id'
-  })
+  @JoinColumn({name: 'chat_id'})
+  public chat: Chat;
 
-  @OneToMany(() => File, (file: File) => file.id)
-    file: File[];
-  @JoinColumn({ 
-    name: 'file_id'
-  })
+  @Column()
+  public chat_id: number;
+
+  @ManyToOne(() => File, (file: File) => file.id)
+  @JoinColumn({name: 'file_id'})
+  public file: File[];
+
+  @Column()
+  public file_id: number;
   
   @CreateDateColumn({
     name: 'created_at'
