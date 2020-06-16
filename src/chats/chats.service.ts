@@ -1,9 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DeleteResult, Repository, UpdateResult, Not, IsNull } from 'typeorm';
 import { Chats } from './chats.entity';
 import { CreateChatsDto, GetChatsDto } from './dto/chats.dto';
-
 
 @Injectable()
 export class ChatsService {
@@ -30,11 +29,19 @@ export class ChatsService {
     return this.chatsRepository.findOne(id);
   }
 
-  public async update(id: number, createChatsDto: CreateChatsDto): Promise<UpdateResult> {
+  public async update(id: number, req, createChatsDto: CreateChatsDto): Promise<UpdateResult> {
+    const Chat = await this.chatsRepository.findOne(id);
+    if (req.user.id !== Chat.ownerId) {
+      throw new HttpException('User is not owner', HttpStatus.NOT_IMPLEMENTED);
+    }
     return this.chatsRepository.update({ id }, createChatsDto);
   }
 
-  public async delete(id: number): Promise<DeleteResult> {
+  public async delete(id: number, req): Promise<DeleteResult> {
+    const Chat = await this.chatsRepository.findOne(id);
+    if (req.user.id !== Chat.ownerId) {
+      throw new HttpException('User is not owner', HttpStatus.NOT_IMPLEMENTED);
+    }
     return this.chatsRepository.delete(id);
   }
 }

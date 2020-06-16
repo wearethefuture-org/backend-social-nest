@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, Query, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, Query, UseGuards, Request } from '@nestjs/common';
 import {
   ApiBearerAuth,
   ApiCreatedResponse,
@@ -24,7 +24,7 @@ export class ChatsController {
 
   @Post()
   @ApiCreatedResponse({
-    type: Chats
+    type: Chats,
   })
   public create(@Body() createChatsDto: CreateChatsDto): Promise<Chats> {
     return this.chatsService.save(createChatsDto);
@@ -32,7 +32,7 @@ export class ChatsController {
 
   @Get()
   @ApiCreatedResponse({
-    type: Chats
+    type: Chats,
   })
   public find(@Query() getChatsDto: GetChatsDto): Promise<Chats[]> {
     return this.chatsService.find(getChatsDto);
@@ -40,19 +40,19 @@ export class ChatsController {
 
   @Get(':id')
   @ApiCreatedResponse({
-    type: Chats
+    type: Chats,
   })
   public findOne(@Param('id') id: number): Promise<Chats> {
     return this.chatsService.findOne(id);
   }
 
   @Put(':id')
-  public update(@Param('id') id: number, @Body() createChatsDto: CreateChatsDto): Promise<UpdateResult> {
-    return this.chatsService.update(id, createChatsDto);
+  public update(@Param('id') id: number, @Request() req, @Body() createChatsDto: CreateChatsDto): Promise<UpdateResult> {
+    return this.chatsService.update(id, req, createChatsDto);
   }
 
   @Delete(':id')
-  public delete(@Param('id') id: number): Promise<DeleteResult> {
-    return this.chatsService.delete(id);
+  public delete(@Param('id') id: number, @Request() req): Promise<DeleteResult> {
+    return this.chatsService.delete(id, req);
   }
 }
