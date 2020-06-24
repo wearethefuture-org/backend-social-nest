@@ -29,7 +29,7 @@ export class UsersController {
   @ApiCreatedResponse({
     type: [User]
   })
-  public find(@Query() getUserDto: GetUserDto): Promise<User[]> {
+  public find(): Promise<User[]> {
     return this.usersService.find();
   }
 
