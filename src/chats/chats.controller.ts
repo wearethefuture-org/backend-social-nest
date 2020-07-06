@@ -1,4 +1,5 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, Query, UseGuards, Request } from '@nestjs/common';
+import { UsersService } from './../users/users.service';
+import { Body, Controller, Delete, Get, Param, Post, Put, Query, UseGuards, Request, ParseIntPipe } from '@nestjs/common';
 import { CreateChatDto, GetChatDto } from './dto/chat.dto';
 import { Chat} from './chats.entity';
 import { ChatsService } from './chats.service';
@@ -29,12 +30,22 @@ export class ChatsController {
     return this.chatService.create(req.user.id, createChatDto);
   }
 
+  // @Get()
+  // @ApiCreatedResponse({
+  //   type: [Chat]
+  // })
+  // public getAll(@Query() getChatDto: GetChatDto): Promise<Chat[]> {
+  //   return this.chatService.getAllChats();
+  // }
+
+  //'getChats()' return all the chats which are associated with the user 
+  // provided through 'userID' by the request  
   @Get()
   @ApiCreatedResponse({
     type: [Chat]
   })
-  public find(@Query() getUserDto: GetChatDto): Promise<Chat[]> {
-    return this.chatService.find();
+  public getChatsOfUser(@Request() req): Promise<Chat []> {
+    return this.chatService.getChatsOfUser(req.user.id);
   }
 
   @Get(':id')

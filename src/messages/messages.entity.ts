@@ -14,14 +14,18 @@ export class Message {
   @ApiProperty()
   public text: string;
 
-  @ManyToOne(() => User, (user: User) => user.messages)
-  @JoinColumn({name: 'user_id'})
-  public user: User;
+  @ManyToOne(() => User, (user: User) => user.id, {
+    eager: true
+  })
+  @JoinColumn({name: 'owner_id'})
+  public owner: User;
 
   @Column()
-  public user_id: number;
+  public owner_id: number;
 
-  @ManyToOne(() => Chat, (chat: Chat) => chat.messages)
+  @ManyToOne(() => Chat, (chat: Chat) => chat.messages, {
+    eager: true
+  })
   @JoinColumn({name: 'chat_id'})
   public chat: Chat;
 
@@ -32,7 +36,7 @@ export class Message {
   @JoinColumn({name: 'file_id'})
   public file: File[];
 
-  @Column()
+  @Column({ nullable: true })
   public file_id: number;
   
   @CreateDateColumn({

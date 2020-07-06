@@ -122,10 +122,20 @@ export class User {
   @ApiProperty()
   public updatedAt: Date;
 
-  @OneToMany(() => Message, (message: Message) => message.user)
-    messages: Message[];
+  // @OneToMany(() => Message, (message: Message) => message.user)
+  //   messages: Message[];
 
   @ManyToMany(type => Chat)
   @JoinTable()
   categories: Chat[];
+
+  @OneToMany(() => Chat, (chat: Chat) => chat.id, {
+    // eager: true,
+    nullable : true
+  })
+  @JoinColumn({name: 'chat_id'})
+  public chat_id: Chat;
+
+  // @Column()
+  // public chats_id: number;
 }

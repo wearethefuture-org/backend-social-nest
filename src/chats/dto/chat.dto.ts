@@ -11,10 +11,6 @@ export class CreateChatDto {
   @IsString()
   public description: string = '';
 
-  // @ApiProperty()
-  // @IsNumber()
-  // public owner_id: number;
-
   @ApiProperty()
   @IsNumber()
   public partner_id: number;

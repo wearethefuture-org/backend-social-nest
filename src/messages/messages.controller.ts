@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, Query, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, Query, UseGuards, Request } from '@nestjs/common';
 import { CreateMessageDto, GetMessageDto } from './dto/message.dto';
 import { Message } from './messages.entity';
 import { MessagesService } from './messages.service';
@@ -25,8 +25,8 @@ export class MessagesController {
   @ApiCreatedResponse({
     type: Message
   })
-  public create(@Body() createMessageDto: CreateMessageDto): Promise<Message> {
-    return this.messageService.save(createMessageDto);
+  public create(@Body() createMessageDto: CreateMessageDto, @Request() req): Promise<Message> {
+    return this.messageService.create(req.user.id, createMessageDto);
   }
 
   @Get()

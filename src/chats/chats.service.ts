@@ -13,7 +13,7 @@ export class ChatsService {
     @InjectRepository(Chat)
     private chatsRepository: Repository<Chat>,
     @InjectRepository(User)
-    private usersRepository : Repository<User>,
+    private usersRepository: Repository<User>,
   ) {
   }
 
@@ -25,8 +25,14 @@ export class ChatsService {
     return this.chatsRepository.update({id}, createChatDto);
   }
 
-  public async find(): Promise<Chat[]> {
-    return this.chatsRepository.find();
+  // public async getAllChats(): Promise<Chat[]> {
+  //   return this.chatsRepository.find();
+  // }
+
+  public async getChatsOfUser(userID: number): Promise<Chat[]> {
+    console.log(typeof(userID));
+    console.log(userID);
+    return this.chatsRepository.find({where: {owner_id: userID}});
   }
 
   public async findOne(id: number): Promise<Chat> {

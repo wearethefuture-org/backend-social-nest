@@ -10,13 +10,17 @@ import { UpdateResult } from 'typeorm/query-builder/result/UpdateResult';
 export class MessagesService {
   constructor(
     @InjectRepository(Message)
-    private readonly messageRepository: Repository<Message>,
+    private messageRepository: Repository<Message>,
   ) {
   }
 
-  public async save(createMessageDto: CreateMessageDto): Promise<Message> {
-    return this.messageRepository.save(createMessageDto);
+  public async create(userId: number, data: CreateMessageDto): Promise<Message> {
+    return this.messageRepository.save({owner_id: userId, ...data});
   }
+
+  // public async save(createMessageDto: CreateMessageDto): Promise<Message> {
+  //   return this.messageRepository.save(createMessageDto);
+  // }
 
   public async update(id: number, createMessageDto: CreateMessageDto): Promise<UpdateResult> {
     return this.messageRepository.update({id}, createMessageDto);
