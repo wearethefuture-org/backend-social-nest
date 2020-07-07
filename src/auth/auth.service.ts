@@ -30,11 +30,11 @@ export class AuthService {
     return user;
   }
 
-  public async login(authLoginDto: AuthLoginDto) {
-    const payload = {email: authLoginDto.email};
+  public async login(user: User, authLoginDto: AuthLoginDto) {
+    const payload = {user, email: authLoginDto.email};
 
     return {
-      access_token: this.jwtService.sign(payload),
+      token: this.jwtService.sign(payload),
     };
   }
 
