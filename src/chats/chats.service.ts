@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, Any } from 'typeorm';
 import { CreateChatDto } from './dto/chat.dto';
@@ -18,11 +18,25 @@ export class ChatsService {
   }
 
   public async create(userId: number, data: CreateChatDto): Promise<Chat> {
-    return this.chatsRepository.save({owner_id: userId, ...data});
+    const user = await this.usersRepository.findOne({where: {id: data.partner_id}})
+    if (!user) {
+      throw new HttpException('partner ID does not exist', HttpStatus.BAD_REQUEST);
+    }
+    return await this.chatsRepository.save({owner_id: userId, ...data});
   }
 
-  public async update(id: number, createChatDto: CreateChatDto): Promise<UpdateResult> {
-    return this.chatsRepository.update({id}, createChatDto);
+  public async update(id: number, createChatDto: Partial <CreateChatDto>): Promise<Chat> {
+    const chat = await this.chatsRepository.findOne({
+      where: { id }
+    });
+    if (!chat) {
+      throw new HttpException('Chat with this ID not found', HttpStatus.NOT_FOUND);
+    }
+    this.chatsRepository.update({id}, createChatDto);
+    const updatedChat = await this.chatsRepository.findOne({
+      where: { id }
+    });
+    return updatedChat;
   }
 
   // public async getAllChats(): Promise<Chat[]> {
@@ -30,16 +44,27 @@ export class ChatsService {
   // }
 
   public async getChatsOfUser(userID: number): Promise<Chat[]> {
-    console.log(typeof(userID));
-    console.log(userID);
     return this.chatsRepository.find({where: {owner_id: userID}});
   }
 
   public async findOne(id: number): Promise<Chat> {
-    return this.chatsRepository.findOne(id);
+    const chat = await this.chatsRepository.findOne({
+      where: { id }
+    });
+    if (!chat) {
+      throw new HttpException('Chat with this ID not found', HttpStatus.NOT_FOUND);
+    }
+    return chat;
   }
 
-  public async delete(id: number): Promise<DeleteResult> {
-    return this.chatsRepository.delete(id);
+  public async delete(id: number): Promise<Chat> {
+    const chat = await this.chatsRepository.findOne({
+      where: { id }
+    });
+    if (!chat) {
+      throw new HttpException('Chat with this ID not found', HttpStatus.NOT_FOUND);
+    }
+    await this.chatsRepository.delete(id);
+    return chat;
   }
 }

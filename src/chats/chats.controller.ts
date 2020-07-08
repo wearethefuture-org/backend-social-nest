@@ -1,6 +1,6 @@
-import { UsersService } from './../users/users.service';
-import { Body, Controller, Delete, Get, Param, Post, Put, Query, UseGuards, Request, ParseIntPipe } from '@nestjs/common';
-import { CreateChatDto, GetChatDto } from './dto/chat.dto';
+
+import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards, Request } from '@nestjs/common';
+import { CreateChatDto } from './dto/chat.dto';
 import { Chat} from './chats.entity';
 import { ChatsService } from './chats.service';
 import { DeleteResult } from 'typeorm/query-builder/result/DeleteResult';
@@ -57,12 +57,12 @@ export class ChatsController {
   }
 
   @Put(':id')
-  public update(@Param('id') id: number, @Body() createChatDto: CreateChatDto): Promise<UpdateResult> {
+  public update(@Param('id') id: number, @Body() createChatDto: CreateChatDto): Promise<Chat> {
     return this.chatService.update(id, createChatDto);
   }
 
   @Delete(':id')
-  public delete(@Param('id') id: number): Promise<DeleteResult> {
+  public delete(@Param('id') id: number): Promise<Chat> {
     return this.chatService.delete(id);
   }
 }

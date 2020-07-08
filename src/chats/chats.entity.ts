@@ -2,15 +2,12 @@ import {
   Column,
   Entity,
   PrimaryGeneratedColumn,
-  RelationId,
-  OneToOne,
   OneToMany,
   ManyToOne,
   JoinColumn,
   CreateDateColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { File } from '../files/file.entity';
 import { Message } from '../messages/messages.entity'
 import { User } from '../users/user.entity'
 import { ApiProperty } from '@nestjs/swagger';
