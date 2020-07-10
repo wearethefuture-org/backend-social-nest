@@ -1,10 +1,8 @@
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, Any } from 'typeorm';
+import { Repository } from 'typeorm';
 import { CreateChatDto } from './dto/chat.dto';
 import { Chat } from './chats.entity';
-import { DeleteResult } from 'typeorm/query-builder/result/DeleteResult';
-import { UpdateResult } from 'typeorm/query-builder/result/UpdateResult';
 import { User } from 'src/users/user.entity';
 
 @Injectable()
