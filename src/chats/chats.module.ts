@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
-import { ChatsGateway } from './chats.gateway';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Chat } from './chats.entity';
-import { ChatsService } from './chats.service';
 import { ChatsController } from './chats.controller';
+import { ChatsService } from './chats.service';
+import { ChatsGateway } from './chats.gateway';
+import { Chat } from './chats.entity';
 import { User } from 'src/users/user.entity';
 import { File } from 'src/files/file.entity';
 
@@ -22,4 +22,5 @@ import { File } from 'src/files/file.entity';
     ChatsService,
   ]
 })
-export class ChatsModule {}
+export class ChatsModule {
+}
