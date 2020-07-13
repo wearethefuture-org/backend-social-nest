@@ -1,16 +1,16 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, Query, UseGuards, Request } from '@nestjs/common';
+
+import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards, Request } from '@nestjs/common';
+import { CreateChatDto } from './dto/chat.dto';
+import { Chat} from './chats.entity';
+import { ChatsService } from './chats.service';
+import { DeleteResult } from 'typeorm/query-builder/result/DeleteResult';
 import {
   ApiBearerAuth,
   ApiCreatedResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-import { ChatsService } from './chats.service';
-import { Chats } from './chats.entity';
-import { CreateChatsDto, GetChatsDto } from './dto/chats.dto';
 import { UpdateResult } from 'typeorm/query-builder/result/UpdateResult';
-import { DeleteResult } from 'typeorm/query-builder/result/DeleteResult';
-
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard)
@@ -18,41 +18,51 @@ import { DeleteResult } from 'typeorm/query-builder/result/DeleteResult';
 @Controller('chats')
 export class ChatsController {
   constructor(
-    private readonly chatsService: ChatsService,
+    private readonly chatService: ChatsService,
   ) {
   }
 
   @Post()
   @ApiCreatedResponse({
-    type: Chats,
+    type: Chat
   })
-  public create(@Body() createChatsDto: CreateChatsDto): Promise<Chats> {
-    return this.chatsService.save(createChatsDto);
+  public create(@Body() createChatDto: CreateChatDto, @Request() req) : Promise<Chat> {
+    return this.chatService.create(req.user.id, createChatDto);
   }
 
+  // @Get()
+  // @ApiCreatedResponse({
+  //   type: [Chat]
+  // })
+  // public getAll(@Query() getChatDto: GetChatDto): Promise<Chat[]> {
+  //   return this.chatService.getAllChats();
+  // }
+
+  //'getChats()' return all the chats which are associated with the user 
+  // provided through 'userID' by the request  
   @Get()
   @ApiCreatedResponse({
-    type: Chats,
+    type: [Chat]
   })
-  public find(@Query() getChatsDto: GetChatsDto): Promise<Chats[]> {
-    return this.chatsService.find(getChatsDto);
+  public getChatsOfUser(@Request() req): Promise<Chat []> {
+    return this.chatService.getChatsOfUser(req.user.id);
   }
 
   @Get(':id')
   @ApiCreatedResponse({
-    type: Chats,
+    type: [Chat]
   })
-  public findOne(@Param('id') id: number): Promise<Chats> {
-    return this.chatsService.findOne(id);
+  public findOne(@Param('id') id: number): Promise<Chat> {
+    return this.chatService.findOne(id);
   }
 
   @Put(':id')
-  public update(@Param('id') id: number, @Request() req, @Body() createChatsDto: CreateChatsDto): Promise<UpdateResult> {
-    return this.chatsService.update(id, req, createChatsDto);
+  public update(@Param('id') id: number, @Body() createChatDto: CreateChatDto): Promise<Chat> {
+    return this.chatService.update(id, createChatDto);
   }
 
   @Delete(':id')
-  public delete(@Param('id') id: number, @Request() req): Promise<DeleteResult> {
-    return this.chatsService.delete(id, req);
+  public delete(@Param('id') id: number): Promise<Chat> {
+    return this.chatService.delete(id);
   }
 }

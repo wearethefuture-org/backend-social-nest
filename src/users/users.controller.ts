@@ -1,5 +1,6 @@
+import { GetUsersFilterDto } from './dto/get-users-filter.dto';
 import { Body, Controller, Delete, Get, Param, Post, Put, Query, UseGuards } from '@nestjs/common';
-import { CreateUserDto, GetUserDto } from './dto/user.dto';
+import { CreateUserDto } from './dto/user.dto';
 import { User } from './user.entity';
 import { UsersService } from './users.service';
 import { DeleteResult } from 'typeorm/query-builder/result/DeleteResult';
@@ -30,15 +31,15 @@ export class UsersController {
   }
 
   @Get()
-  @ApiCreatedResponse({
-    type: [User]
-  })
-  public find(@Query() getUserDto: GetUserDto): Promise<User[]> {
-    return this.usersService.find();
+  // @ApiCreatedResponse({
+  //   type: [User] 
+  // })
+  getUsers(@Query() filterDto: GetUsersFilterDto): Promise<User[]> {
+    return this.usersService.getUsers(filterDto);
   }
 
   @Put(':id')
-  public update(@Param('id') id: number, @Body() createUserDto: CreateUserDto): Promise<UpdateResult> {
+  public update(@Param('id') id: number, @Body() createUserDto: CreateUserDto): Promise<User> {
     return this.usersService.update(id, createUserDto);
   }
 
@@ -51,7 +52,7 @@ export class UsersController {
   }
 
   @Delete(':id')
-  public delete(@Param('id') id: number): Promise<DeleteResult> {
+  public delete(@Param('id') id: number): Promise<User> {
     return this.usersService.delete(id);
   }
 }
