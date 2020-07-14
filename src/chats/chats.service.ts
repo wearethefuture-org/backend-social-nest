@@ -1,47 +1,68 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DeleteResult, Repository, UpdateResult, Not, IsNull } from 'typeorm';
-import { Chats } from './chats.entity';
-import { CreateChatsDto, GetChatsDto } from './dto/chats.dto';
+import { Repository } from 'typeorm';
+import { CreateChatDto } from './dto/chat.dto';
+import { Chat } from './chats.entity';
+import { User } from 'src/users/user.entity';
 
 @Injectable()
 export class ChatsService {
   constructor(
-    @InjectRepository(Chats)
-    private readonly chatsRepository: Repository<Chats>,
+    @InjectRepository(Chat)
+    private chatsRepository: Repository<Chat>,
+    @InjectRepository(User)
+    private usersRepository: Repository<User>,
   ) {
   }
 
-  public async save(createChatsDto: CreateChatsDto): Promise<Chats> {
-    return this.chatsRepository.save(createChatsDto);
+  public async create(userId: number, data: CreateChatDto): Promise<Chat> {
+    const user = await this.usersRepository.findOne({where: {id: data.partner_id}})
+    if (!user) {
+      throw new HttpException('partner ID does not exist', HttpStatus.BAD_REQUEST);
+    }
+    return await this.chatsRepository.save({owner_id: userId, ...data});
   }
 
-  public async find(getChatsDto: GetChatsDto): Promise<Chats[]> {
-    const where = getChatsDto.isGlobal ? {} : { ownerId: Not(IsNull()) };
-    return this.chatsRepository.find({
-      skip: getChatsDto.offset,
-      take: getChatsDto.limit,
-      where: where,
+  public async update(id: number, createChatDto: Partial <CreateChatDto>): Promise<Chat> {
+    const chat = await this.chatsRepository.findOne({
+      where: { id }
     });
-  }
-
-  public async findOne(id: number): Promise<Chats> {
-    return this.chatsRepository.findOne(id);
-  }
-
-  public async update(id: number, req, createChatsDto: CreateChatsDto): Promise<UpdateResult> {
-    const Chat = await this.chatsRepository.findOne(id);
-    if (req.user.id !== Chat.ownerId) {
-      throw new HttpException('User is not owner', HttpStatus.NOT_IMPLEMENTED);
+    if (!chat) {
+      throw new HttpException('Chat with this ID not found', HttpStatus.NOT_FOUND);
     }
-    return this.chatsRepository.update({ id }, createChatsDto);
+    this.chatsRepository.update({id}, createChatDto);
+    const updatedChat = await this.chatsRepository.findOne({
+      where: { id }
+    });
+    return updatedChat;
   }
 
-  public async delete(id: number, req): Promise<DeleteResult> {
-    const Chat = await this.chatsRepository.findOne(id);
-    if (req.user.id !== Chat.ownerId) {
-      throw new HttpException('User is not owner', HttpStatus.NOT_IMPLEMENTED);
+  // public async getAllChats(): Promise<Chat[]> {
+  //   return this.chatsRepository.find();
+  // }
+
+  public async getChatsOfUser(userID: number): Promise<Chat[]> {
+    return this.chatsRepository.find({where: {owner_id: userID}});
+  }
+
+  public async findOne(id: number): Promise<Chat> {
+    const chat = await this.chatsRepository.findOne({
+      where: { id }
+    });
+    if (!chat) {
+      throw new HttpException('Chat with this ID not found', HttpStatus.NOT_FOUND);
     }
-    return this.chatsRepository.delete(id);
+    return chat;
+  }
+
+  public async delete(id: number): Promise<Chat> {
+    const chat = await this.chatsRepository.findOne({
+      where: { id }
+    });
+    if (!chat) {
+      throw new HttpException('Chat with this ID not found', HttpStatus.NOT_FOUND);
+    }
+    await this.chatsRepository.delete(id);
+    return chat;
   }
 }

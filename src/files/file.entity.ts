@@ -1,5 +1,6 @@
-import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, ManyToOne } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
+import { Message } from 'src/messages/messages.entity';
 
 @Entity({ name: 'files' })
 export class File {
@@ -22,4 +23,7 @@ export class File {
   @UpdateDateColumn({ name: 'updated_at' })
   @ApiProperty()
   public updatedAt: Date;
+
+  @ManyToOne(() => Message, (message: Message) => message.file)
+    message: Message;
 }
