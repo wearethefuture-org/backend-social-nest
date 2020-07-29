@@ -1,5 +1,17 @@
 import { GetUsersFilterDto } from './dto/get-users-filter.dto';
-import { Body, Controller, Delete, Get, Param, Post, Put, Query, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+  Query,
+  UploadedFile,
+  UseGuards,
+  UseInterceptors,
+} from '@nestjs/common';
 import { CreateUserDto } from './dto/user.dto';
 import { User } from './user.entity';
 import { UsersService } from './users.service';
@@ -11,6 +23,7 @@ import {
 } from '@nestjs/swagger';
 import { UpdateResult } from 'typeorm/query-builder/result/UpdateResult';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard)
@@ -30,9 +43,16 @@ export class UsersController {
     return this.usersService.save(createUserDto);
   }
 
+  @Post(':id')
+  @UseInterceptors(FileInterceptor('file'))
+  uploadFile(@UploadedFile() file) {
+    console.log(file);
+  }
+
+
   @Get()
   // @ApiCreatedResponse({
-  //   type: [User] 
+  //   type: [User]
   // })
   getUsers(@Query() filterDto: GetUsersFilterDto): Promise<User[]> {
     return this.usersService.getUsers(filterDto);
