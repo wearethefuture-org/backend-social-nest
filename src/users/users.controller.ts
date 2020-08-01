@@ -15,15 +15,15 @@ import {
 import { CreateUserDto } from './dto/user.dto';
 import { User } from './user.entity';
 import { UsersService } from './users.service';
-import { DeleteResult } from 'typeorm/query-builder/result/DeleteResult';
 import {
   ApiBearerAuth,
   ApiCreatedResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { UpdateResult } from 'typeorm/query-builder/result/UpdateResult';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { diskStorage } from 'multer';
+import { editFileName, imageFileFilter } from '../utils/fileUpload.utils';
 
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard)
@@ -44,11 +44,22 @@ export class UsersController {
   }
 
   @Post(':id')
-  @UseInterceptors(FileInterceptor('file'))
-  uploadFile(@UploadedFile() file) {
-    console.log(file);
+  @UseInterceptors(
+    FileInterceptor('file', {
+      storage: diskStorage({
+        destination: 'static/uploads',
+        filename: editFileName,
+      }),
+      fileFilter: imageFileFilter,
+    }),
+  )
+  async uploadedFile(@UploadedFile() file) {
+    const response = {
+      originalname: file.originalname,
+      filename: file.filename,
+    };
+    return response;
   }
-
 
   @Get()
   // @ApiCreatedResponse({
