@@ -1,5 +1,7 @@
 
-import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards, Request } from '@nestjs/common';
+import {GetChatDto } from './dto/chat.dto';
+import { GetChatsFilterDto } from './dto/get-chats-filter.dto';
+import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards, Request, Query } from '@nestjs/common';
 import { CreateChatDto } from './dto/chat.dto';
 import { Chat} from './chats.entity';
 import { ChatsService } from './chats.service';
@@ -44,8 +46,8 @@ export class ChatsController {
   @ApiCreatedResponse({
     type: [Chat]
   })
-  public getChatsOfUser(@Request() req): Promise<Chat []> {
-    return this.chatService.getChatsOfUser(req.user.id);
+  public getChatsOfUser(@Request() req, @Query() getChatDto: GetChatDto): Promise<Chat[]> {
+    return this.chatService.getChatsOfUser(req.user.id, getChatDto);
   }
 
   @Get(':id')

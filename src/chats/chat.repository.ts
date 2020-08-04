@@ -4,14 +4,19 @@ import { GetChatsFilterDto } from './dto/get-chats-filter.dto';
 
 @EntityRepository(Chat)
 export class ChatRepository extends Repository<Chat> {
-    async getChats(filterDto: GetChatsFilterDto): Promise<Chat[]> {
+    async getChatsOfUser(filterDto: GetChatsFilterDto): Promise<Chat[]> {
         const { search } = filterDto;
         const query = this.createQueryBuilder('chat');
         
         if (search) {
-            query.where('name ILIKE :search', { search: `%${search}%`});
+            query.where('name ILIKE :search', { search: `%${search}%`})
+            .orWhere('owner_id ILIKE :search', { search: `%${search}%`})
+            .orWhere('partner_id ILIKE :search', { search: `%${search}%`});
           }
+          
           const chats = await query.getMany();
           return chats;
         }
       }
+
+     
