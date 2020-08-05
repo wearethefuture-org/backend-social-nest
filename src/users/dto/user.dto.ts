@@ -69,3 +69,30 @@ export class GetUserDto {
   @IsBoolean()
   public onlyUsers?: boolean = true;
 }
+export class UpdateUserDto {
+  @ApiProperty()
+  @IsString()
+  public firstName: string;
+
+  @ApiProperty()
+  @IsString()
+  public lastName: string;
+
+  @ApiProperty()
+  @IsEmail()
+  public email: string;
+
+  @ApiProperty()
+  @IsString()
+  public userName: string;
+
+  @ApiProperty()
+  @IsDate()
+  public birthdayDate: Date;
+
+  @ApiProperty()
+  @IsString()
+  public password: string;
+
+
+}
