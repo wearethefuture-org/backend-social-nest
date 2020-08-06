@@ -61,8 +61,8 @@ export class UsersController {
       fileFilter: imageFileFilter,
     }),
   )
-  public uploadedFile(@UploadedFile() file ): Promise<File> {
-    return this.filesService.create(file);
+  public uploadedFile(@UploadedFile() file, @Request() req ): Promise<File> {
+    return this.filesService.create(req.user.id, file);
   }
 
 
