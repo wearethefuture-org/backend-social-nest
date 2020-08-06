@@ -2,7 +2,6 @@ import { Injectable} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { File } from './file.entity';
-import { CreateFileDto } from './dto/files.dto';
 
 
 @Injectable()
@@ -12,7 +11,7 @@ export class FilesService {
     private readonly fileRepository: Repository<File>,
   ) {
   }
-  public async create(id: number, createFileDto: CreateFileDto): Promise<File> {
-    return this.fileRepository.save({id, createFileDto});
+  public async create(file: any): Promise<File> {
+    return this.fileRepository.save({name:file.filename, url:file.path});
   }
 }

@@ -61,11 +61,10 @@ export class UsersController {
       fileFilter: imageFileFilter,
     }),
   )
-  public uploadedFile(@UploadedFile() file,  createFileDto: CreateFileDto ): Promise<File> {
-    console.log("file:", file);
-    console.log("createFileDto:", createFileDto);
-    return this.filesService.create(file.id, createFileDto);
+  public uploadedFile(@UploadedFile() file ): Promise<File> {
+    return this.filesService.create(file);
   }
+
 
   /*async uploadedFile(@UploadedFile() file) {
     const response = {
@@ -74,7 +73,6 @@ export class UsersController {
     };
     return response;
   }*/
-
 
 
 
