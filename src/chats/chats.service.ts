@@ -24,7 +24,7 @@ export class ChatsService {
     if (!user) {
       throw new HttpException('partner ID does not exist', HttpStatus.BAD_REQUEST);
     }
-    return await this.chatsRepository.save({owner_id: userId, ...data});
+    return await this.chatsRepository.save({ownerId: userId, ...data});
   }
 
   public async update(id: number, createChatDto: Partial <CreateChatDto>): Promise<Chat> {
@@ -45,17 +45,8 @@ export class ChatsService {
   //   return this.chatsRepository.find();
   // }
 
-  public async getChatsOfUser(userID: number, getChatDto: GetChatDto): Promise<Chat[]> {
-    return this.chatRepository.find({
-      //where: {owner_id: userID},
-      where : [
-        {owner_id : userID},
-        {partner_id : userID}
-    ],
-      take: getChatDto.take,
-      skip: getChatDto.skip,
-      order: { updatedAt: 'DESC'}
-    });
+  public async getChatsOfUser(filterDto: GetChatsFilterDto): Promise<Chat[]> {
+    return this.chatRepository.getChatsOfUser(filterDto);
   }
 
   public async findOne(id: number): Promise<Chat> {
