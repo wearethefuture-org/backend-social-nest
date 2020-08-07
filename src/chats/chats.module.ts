@@ -12,7 +12,7 @@ import { File } from 'src/files/file.entity';
     TypeOrmModule.forFeature([Chat, File, User]),
   ],
   providers: [ 
-    ChatsGateway,
+    // ChatsGateway,
     ChatsService,
   ],
   controllers: [

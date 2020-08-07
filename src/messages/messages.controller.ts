@@ -2,13 +2,11 @@ import { Body, Controller, Delete, Get, Param, Post, Put, Query, UseGuards, Requ
 import { CreateMessageDto, GetMessageDto } from './dto/message.dto';
 import { Message } from './messages.entity';
 import { MessagesService } from './messages.service';
-import { DeleteResult } from 'typeorm/query-builder/result/DeleteResult';
 import {
   ApiBearerAuth,
   ApiCreatedResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { UpdateResult } from 'typeorm/query-builder/result/UpdateResult';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 
 @ApiBearerAuth()
@@ -33,12 +31,12 @@ export class MessagesController {
   @ApiCreatedResponse({
     type: [Message]
   })
-  public find(@Query() getMessageDto: GetMessageDto): Promise<Message[]> {
-    return this.messageService.find();
+  public find(@Query('chat_id') chat_id: number, @Query() getMessageDto: GetMessageDto): Promise<Message[]> {
+    return this.messageService.find(chat_id, getMessageDto);
   }
 
   @Put(':id')
-  public update(@Param('id') id: number, @Body() createMessageDto: CreateMessageDto): Promise<UpdateResult> {
+  public update(@Param('id') id: number, @Body() createMessageDto: CreateMessageDto): Promise<Message> {
     return this.messageService.update(id, createMessageDto);
   }
 
@@ -51,7 +49,7 @@ export class MessagesController {
   }
 
   @Delete(':id')
-  public delete(@Param('id') id: number): Promise<DeleteResult> {
+  public delete(@Param('id') id: number): Promise<Message> {
     return this.messageService.delete(id);
   }
 }

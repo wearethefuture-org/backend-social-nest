@@ -1,16 +1,15 @@
 
-import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards, Request } from '@nestjs/common';
-import { CreateChatDto } from './dto/chat.dto';
+import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards, Request, Query } from '@nestjs/common';
+import { CreateChatDto, GetChatDto } from './dto/chat.dto';
 import { Chat} from './chats.entity';
 import { ChatsService } from './chats.service';
-import { DeleteResult } from 'typeorm/query-builder/result/DeleteResult';
 import {
   ApiBearerAuth,
   ApiCreatedResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { UpdateResult } from 'typeorm/query-builder/result/UpdateResult';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { query } from 'express';
 
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard)
@@ -44,8 +43,8 @@ export class ChatsController {
   @ApiCreatedResponse({
     type: [Chat]
   })
-  public getChatsOfUser(@Request() req): Promise<Chat []> {
-    return this.chatService.getChatsOfUser(req.user.id);
+  public getChatsOfUser(@Request() req, @Query() getChatDto: GetChatDto): Promise<Chat[]> {
+    return this.chatService.getChatsOfUser(req.user.id, getChatDto);
   }
 
   @Get(':id')

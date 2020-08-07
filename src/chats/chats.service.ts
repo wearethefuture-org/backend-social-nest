@@ -1,7 +1,7 @@
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { CreateChatDto } from './dto/chat.dto';
+import { CreateChatDto, GetChatDto } from './dto/chat.dto';
 import { Chat } from './chats.entity';
 import { User } from 'src/users/user.entity';
 
@@ -41,8 +41,16 @@ export class ChatsService {
   //   return this.chatsRepository.find();
   // }
 
-  public async getChatsOfUser(userID: number): Promise<Chat[]> {
-    return this.chatsRepository.find({where: {owner_id: userID}});
+  public async getChatsOfUser(userID: number, getChatDto: GetChatDto): Promise<Chat[]> {
+    return this.chatsRepository.find({
+      where : [
+        {owner_id : userID},
+        {partner_id : userID}
+    ],
+      take: getChatDto.take,
+      skip: getChatDto.skip,
+      order: { updatedAt: 'DESC'}
+    });
   }
 
   public async findOne(id: number): Promise<Chat> {
