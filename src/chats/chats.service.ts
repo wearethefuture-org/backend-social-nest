@@ -1,15 +1,19 @@
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { CreateChatDto } from './dto/chat.dto';
+import { CreateChatDto, GetChatDto } from './dto/chat.dto';
 import { Chat } from './chats.entity';
 import { User } from 'src/users/user.entity';
+import { ChatRepository } from './chat.repository';
+import { GetChatsFilterDto } from './dto/get-chats-filter.dto';
 
 @Injectable()
 export class ChatsService {
   constructor(
     @InjectRepository(Chat)
     private chatsRepository: Repository<Chat>,
+    @InjectRepository(ChatRepository)
+    private chatRepository: ChatRepository,
     @InjectRepository(User)
     private usersRepository: Repository<User>,
   ) {
@@ -20,7 +24,7 @@ export class ChatsService {
     if (!user) {
       throw new HttpException('partner ID does not exist', HttpStatus.BAD_REQUEST);
     }
-    return await this.chatsRepository.save({owner_id: userId, ...data});
+    return await this.chatsRepository.save({ownerId: userId, ...data});
   }
 
   public async update(id: number, createChatDto: Partial <CreateChatDto>): Promise<Chat> {
@@ -41,8 +45,8 @@ export class ChatsService {
   //   return this.chatsRepository.find();
   // }
 
-  public async getChatsOfUser(userID: number): Promise<Chat[]> {
-    return this.chatsRepository.find({where: {owner_id: userID}});
+  public async getChatsOfUser(filterDto: GetChatsFilterDto): Promise<Chat[]> {
+    return this.chatRepository.getChatsOfUser(filterDto);
   }
 
   public async findOne(id: number): Promise<Chat> {
