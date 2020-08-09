@@ -5,12 +5,12 @@ import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
 import { UserRepository } from './user.repository'
 import { MulterModule } from '@nestjs/platform-express';
-import { FilesModule } from '../files/files.module';
+//import { FilesModule } from '../files/files.module';
+import { File } from '../files/file.entity';
 
 @Module({
   imports: [
-    FilesModule,
-    TypeOrmModule.forFeature([User, UserRepository]),
+    TypeOrmModule.forFeature([User, UserRepository, File]),
     MulterModule.register({
       dest: 'static/uploads',
     }),

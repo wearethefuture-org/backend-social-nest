@@ -25,7 +25,6 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { editFileName, imageFileFilter } from '../utils/fileUpload.utils';
 import { CreateFileDto } from '../files/dto/files.dto';
-import { FilesService } from '../files/files.service';
 import { File } from '../files/file.entity';
 
 @ApiBearerAuth()
@@ -35,7 +34,6 @@ import { File } from '../files/file.entity';
 export class UsersController {
   constructor(
     private readonly usersService: UsersService,
-    private readonly filesService: FilesService,
 
   ) {
   }
@@ -61,7 +59,7 @@ export class UsersController {
     }),
   )
   public uploadedFile(@UploadedFile() file, @Request() req ): Promise<File> {
-    return this.filesService.create(req.user.id, file);
+    return this.usersService.createAvatar(req.user.id, file);
   }
 
 /*  public uploadedFile(@UploadedFile() file): Promise<File> {

@@ -2,7 +2,6 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from './users/users.module';
-import { FilesModule } from './files/files.module';
 import { ChatsModule } from './chats/chats.module';
 import { AuthModule } from './auth/auth.module';
 import { MessagesModule } from './messages/messages.module'
@@ -27,7 +26,6 @@ import { join } from 'path';
       synchronize: true
     }),
     AuthModule,
-    FilesModule,
     UsersModule,
     ChatsModule,
     MessagesModule,

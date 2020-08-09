@@ -5,6 +5,7 @@ import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/user.dto';
 import { User } from './user.entity';
 import { GetUsersFilterDto } from './dto/get-users-filter.dto';
+import { File } from '../files/file.entity';
 
 @Injectable()
 export class UsersService {
@@ -13,8 +14,17 @@ export class UsersService {
     private readonly usersRepository: Repository<User>,
     @InjectRepository(UserRepository)
     private userRepository: UserRepository,
-  ) { 
+    @InjectRepository(File)
+    private readonly fileRepository: Repository<File>,
+  ) {
   }
+
+  public async createAvatar(userId: number, file: any): Promise<File> {
+    const createAvatar = await this.fileRepository.save({ name: file.filename, url: file.path });
+    await this.usersRepository.save({id:userId,  avatar_Id: createAvatar });
+    return createAvatar;
+  }
+
 
   public async save(createUserDto: CreateUserDto): Promise<User> {
     return this.usersRepository.save(createUserDto);
