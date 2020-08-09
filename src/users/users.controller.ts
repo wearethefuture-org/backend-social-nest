@@ -52,7 +52,7 @@ export class UsersController {
   @UseInterceptors(
     FileInterceptor('file', {
       storage: diskStorage({
-        destination: 'static/uploads',
+        destination: process.env.SERVE_ROOT,
         filename: editFileName
       }),
       fileFilter: imageFileFilter,

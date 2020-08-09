@@ -6,13 +6,12 @@ import { ChatsModule } from './chats/chats.module';
 import { AuthModule } from './auth/auth.module';
 import { MessagesModule } from './messages/messages.module'
 import { ServeStaticModule } from '@nestjs/serve-static';
-import { join } from 'path';
 
 @Module({
   imports: [
     ServeStaticModule.forRoot({
-      rootPath: process.env.RootPath,
-      serveRoot: '/static'
+      rootPath: process.env.ROOT_PATH,
+      serveRoot: process.env.SERVE_ROOT
     }),
     ConfigModule.forRoot(),
     TypeOrmModule.forRoot({
