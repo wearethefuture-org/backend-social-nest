@@ -20,8 +20,10 @@ export class UsersService {
   }
 
   public async createAvatar(userId: number, file: any): Promise<File> {
-    const createAvatar = await this.fileRepository.save({ name: file.filename, url: file.path });
-    await this.usersRepository.save({id:userId,  avatar_Id: createAvatar });
+    const createAvatar = await this.fileRepository.save({
+      name: file.filename,
+      url: `${process.env.DATABASE_HOST}:${process.env.PORT}/${file.destination}/${file.filename}`});
+    await this.usersRepository.save({id:userId,  avatar: createAvatar });
     return createAvatar;
   }
 

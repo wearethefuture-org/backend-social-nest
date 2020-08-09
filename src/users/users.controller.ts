@@ -12,7 +12,7 @@ import {
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
-import { CreateUserDto, UpdateUserDto } from './dto/user.dto';
+import { CreateUserDto} from './dto/user.dto';
 import { User } from './user.entity';
 import { UsersService } from './users.service';
 import {
@@ -24,7 +24,6 @@ import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { editFileName, imageFileFilter } from '../utils/fileUpload.utils';
-import { CreateFileDto } from '../files/dto/files.dto';
 import { File } from '../files/file.entity';
 
 @ApiBearerAuth()
@@ -54,18 +53,15 @@ export class UsersController {
     FileInterceptor('file', {
       storage: diskStorage({
         destination: 'static/uploads',
+        filename: editFileName
       }),
       fileFilter: imageFileFilter,
     }),
   )
   public uploadedFile(@UploadedFile() file, @Request() req ): Promise<File> {
+    console.log(file);
     return this.usersService.createAvatar(req.user.id, file);
   }
-
-/*  public uploadedFile(@UploadedFile() file): Promise<File> {
-    return this.filesService.create(file);
-  }*/
-
 
 
   @Get()

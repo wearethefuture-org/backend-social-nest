@@ -11,8 +11,8 @@ import { join } from 'path';
 @Module({
   imports: [
     ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '..',  '..', 'static'),
-      serveRoot: '/images'
+      rootPath: process.env.RootPath,
+      serveRoot: '/static'
     }),
     ConfigModule.forRoot(),
     TypeOrmModule.forRoot({
@@ -23,7 +23,8 @@ import { join } from 'path';
       password: process.env.DATABASE_PASSWORD,
       database: process.env.DATABASE_NAME,
       autoLoadEntities: true,
-      synchronize: true
+      synchronize: true,
+
     }),
     AuthModule,
     UsersModule,
