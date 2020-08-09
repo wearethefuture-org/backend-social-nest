@@ -38,8 +38,8 @@ export class ChatsController {
   //   return this.chatService.getAllChats();
   // }
 
-  //'getChats()' return all the chats which are associated with the user 
-  // provided through 'userID' by the request  
+  //'getChats()' return all the chats which are associated with the user
+  // provided through 'userID' by the request
   @Get()
   @ApiCreatedResponse({
     type: [Chat]

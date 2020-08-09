@@ -10,19 +10,20 @@ export class FilesService {
   constructor(
     @InjectRepository(File)
     private readonly fileRepository: Repository<File>,
+    @InjectRepository(User)
     private usersRepository: Repository<User>,
   ) {
   }
-  public async create(userId: number, file: any): Promise<File> {
-  await this.fileRepository.save({name:file.filename, url:file.path});
-  const fileId = file.id;
-  const updatedUserAvatar = await this.usersRepository.findOne({
-    where: { userId }
-  });
-  if (!updatedUserAvatar) {
-    throw new HttpException('User not found ', HttpStatus.BAD_REQUEST);
-  }
-  return await this.usersRepository.save({avatar_id: fileId});
-}
-}
 
+  public async create(userId: number, file: any): Promise<File> {
+    const createAvatar = await this.fileRepository.save({ name: file.filename, url: file.path });
+    await this.usersRepository.save({id:userId,  avatar_Id: createAvatar });
+    return createAvatar;
+
+  }
+
+  // public async create(file: any): Promise<File> {
+  //   return  this.fileRepository.save({name:file.filename, url:file.path});
+  // }
+
+}

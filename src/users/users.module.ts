@@ -5,7 +5,6 @@ import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
 import { UserRepository } from './user.repository'
 import { MulterModule } from '@nestjs/platform-express';
-import { FilesService } from '../files/files.service';
 import { FilesModule } from '../files/files.module';
 
 @Module({

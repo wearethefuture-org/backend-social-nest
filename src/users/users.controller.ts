@@ -56,7 +56,6 @@ export class UsersController {
     FileInterceptor('file', {
       storage: diskStorage({
         destination: 'static/uploads',
-        filename: editFileName,
       }),
       fileFilter: imageFileFilter,
     }),
@@ -65,13 +64,8 @@ export class UsersController {
     return this.filesService.create(req.user.id, file);
   }
 
-
-  /*async uploadedFile(@UploadedFile() file) {
-    const response = {
-      originalname: file.originalname,
-      filename: file.filename,
-    };
-    return response;
+/*  public uploadedFile(@UploadedFile() file): Promise<File> {
+    return this.filesService.create(file);
   }*/
 
 
