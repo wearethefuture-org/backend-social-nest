@@ -32,5 +32,5 @@ export class GetChatDto {
     enum: ['ASC', 'DSC']
   })
   @IsString()
-  public direction?: string = 'ASC';
+  public order?: string = 'DSC';
 }

@@ -1,3 +1,4 @@
+import { AppGateway } from './app.gateway';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -18,7 +19,7 @@ import { MessagesModule } from './messages/messages.module'
       password: process.env.DATABASE_PASSWORD,
       database: process.env.DATABASE_NAME,
       autoLoadEntities: true,
-      synchronize: true
+      // synchronize: true
     }),
     AuthModule,
     FilesModule,
@@ -27,6 +28,6 @@ import { MessagesModule } from './messages/messages.module'
     MessagesModule,
   ],
   controllers: [],
-  providers: [],
+  providers: [AppGateway],
 })
 export class AppModule {}

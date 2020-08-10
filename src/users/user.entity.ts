@@ -70,7 +70,9 @@ export class User {
   @ApiProperty()
   public email: string;
 
-  @Column()
+  @Column({
+    // select: false,
+  })
   @ApiProperty()
   public password: string;
 
