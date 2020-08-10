@@ -40,11 +40,16 @@ export class ChatsController {
   //'getChats()' return all the chats which are associated with the user 
   // provided through 'userID' by the request  
   @Get()
+<<<<<<< HEAD
   @ApiCreatedResponse({
     type: [Chat]
   })
   public getChatsOfUser(@Request() req, @Query() getChatDto: GetChatDto): Promise<Chat[]> {
     return this.chatService.getChatsOfUser(req.user.id, getChatDto);
+=======
+  public getChatsOfUser(@Query() filterDto: GetChatsFilterDto): Promise<Chat[]> {
+    return this.chatService.getChatsOfUser(filterDto);
+>>>>>>> 8671c0bc1e87b6f77a8e85c34672209157af1135
   }
 
   @Get(':id')
