@@ -1,5 +1,6 @@
 import { Body, Controller, Delete, Get, Param, Post, Put, Query, UseGuards, Request } from '@nestjs/common';
 import { CreateMessageDto, GetMessageDto } from './dto/message.dto';
+import { GetMessagesFilterDto } from './dto/get-messages-filter.dto';
 import { Message } from './messages.entity';
 import { MessagesService } from './messages.service';
 import {
@@ -25,6 +26,11 @@ export class MessagesController {
   })
   public create(@Body() createMessageDto: CreateMessageDto, @Request() req): Promise<Message> {
     return this.messageService.create(req.user.id, createMessageDto);
+  }
+
+  @Get()
+  public getMessagesOfChat(@Query() filterDto: GetMessagesFilterDto): Promise<Message[]> {
+    return this.messageService.getMessagesOfChat(filterDto);
   }
 
   @Get()

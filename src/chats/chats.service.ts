@@ -45,17 +45,10 @@ export class ChatsService {
   //   return this.chatsRepository.find();
   // }
 
-  public async getChatsOfUser(userID: number, getChatDto: GetChatDto): Promise<Chat[]> {
-    return this.chatsRepository.find({
-      where : [
-        {owner_id : userID},
-        {partner_id : userID}
-    ],
-      take: getChatDto.take,
-      skip: getChatDto.skip,
-      order: { updatedAt: 'DESC'}
-    });
+  public async getChatsOfUser(filterDto: GetChatsFilterDto): Promise<Chat[]> {
+    return this.chatRepository.getChatsOfUser(filterDto);
   }
+
 
   public async findOne(id: number): Promise<Chat> {
     const chat = await this.chatsRepository.findOne({
