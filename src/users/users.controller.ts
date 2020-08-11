@@ -6,7 +6,6 @@ import {
   Get,
   Param,
   Post,
-  Put,
   Query, Request,
   UploadedFile,
   UseGuards,
@@ -52,8 +51,8 @@ export class UsersController {
   @UseInterceptors(
     FileInterceptor('file', {
       storage: diskStorage({
-        destination: process.env.SERVE_ROOT,
-        filename: editFileName
+        destination: process.env.ROOT_PATH,
+        filename: editFileName,
       }),
       fileFilter: imageFileFilter,
     }),

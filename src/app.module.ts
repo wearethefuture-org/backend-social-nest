@@ -6,11 +6,14 @@ import { ChatsModule } from './chats/chats.module';
 import { AuthModule } from './auth/auth.module';
 import { MessagesModule } from './messages/messages.module'
 import { ServeStaticModule } from '@nestjs/serve-static';
+import { doc } from 'prettier';
+import { join } from 'path';
 
 @Module({
   imports: [
     ServeStaticModule.forRoot({
       rootPath: process.env.ROOT_PATH,
+     //rootPath: join(__dirname, '..', '..', 'static', 'qwert'  ),
       serveRoot: process.env.SERVE_ROOT
     }),
     ConfigModule.forRoot(),

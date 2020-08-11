@@ -22,8 +22,9 @@ export class UsersService {
   public async createAvatar(userId: number, file: any): Promise<File> {
     const createAvatar = await this.fileRepository.save({
       name: file.filename,
-      url: `${process.env.DATABASE_HOST}:${process.env.PORT}/${process.env.SERVE_ROOT}/${file.filename}`});
-    await this.usersRepository.save({id:userId,  avatar: createAvatar });
+      url: `${process.env.SERVE_HOST}:${process.env.PORT}${process.env.SERVE_ROOT}/${file.filename}`,
+    });
+    await this.usersRepository.save({ id: userId, avatar: createAvatar });
     return createAvatar;
   }
 
@@ -34,14 +35,14 @@ export class UsersService {
 
   public async update(id: number, createUserDto: CreateUserDto): Promise<User> {
     const user = await this.usersRepository.findOne({
-      where: { id }
+      where: { id },
     });
     if (!user) {
       throw new HttpException('User with this ID not found', HttpStatus.NOT_FOUND);
     }
-    this.usersRepository.update({id}, createUserDto);
+    this.usersRepository.update({ id }, createUserDto);
     const updatedUser = await this.usersRepository.findOne({
-      where: { id }
+      where: { id },
     });
     return updatedUser;
   }
@@ -52,7 +53,7 @@ export class UsersService {
 
   public async findOne(id: number): Promise<User> {
     const user = await this.usersRepository.findOne({
-      where: { id }
+      where: { id },
     });
     if (!user) {
       throw new HttpException('Chat with this ID not found', HttpStatus.NOT_FOUND);
@@ -62,7 +63,7 @@ export class UsersService {
 
   public async delete(id: number): Promise<User> {
     const user = await this.usersRepository.findOne({
-      where: { id }
+      where: { id },
     });
     if (!user) {
       throw new HttpException('Chat with this ID not found', HttpStatus.NOT_FOUND);
