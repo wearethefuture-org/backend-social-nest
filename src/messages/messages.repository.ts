@@ -7,7 +7,6 @@ export class MessagesRepository extends Repository<Message> {
   async getMessagesOfChat(filterDto: GetMessagesFilterDto): Promise<Message[]> {
     const { search } = filterDto;
     const query = this.createQueryBuilder('message');
-        
     if (search) {
       query.where('text ILIKE :search', { search: `%${search}%`});
     }  
@@ -17,5 +16,7 @@ export class MessagesRepository extends Repository<Message> {
     return messages;
   }
 }
+
+
 
      

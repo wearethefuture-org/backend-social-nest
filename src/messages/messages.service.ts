@@ -60,11 +60,7 @@ export class MessagesService {
     }
     // add skip and other query
   }
-
-  public async getMessagesOfChat(filterDto: GetMessagesFilterDto): Promise<Message[]> {
-    return this.messagesRepository.getMessagesOfChat(filterDto);
-  }
-
+  
   public async findOne(id: number): Promise<Message> {
     const message = await this.messageRepository.findOne({
       where: { id }
@@ -76,6 +72,12 @@ export class MessagesService {
     return message;
   }
 
+  public async getMessagesOfChat(userId: number, filterDto: GetMessagesFilterDto): Promise<Message[]> {
+    if(userId === owner_id) {
+        return this.messagesRepository.getMessagesOfChat(filterDto);
+      }
+  }
+       
   public async delete(id: number): Promise<Message> {
     const message = await this.messageRepository.findOne({
       where: { id }

@@ -28,9 +28,9 @@ export class MessagesController {
     return this.messageService.create(req.user.id, createMessageDto);
   }
 
-  @Get()
-  public getMessagesOfChat(@Query() filterDto: GetMessagesFilterDto): Promise<Message[]> {
-    return this.messageService.getMessagesOfChat(filterDto);
+  @Put(':id')
+  public update(@Param('id') id: number, @Body() createMessageDto: CreateMessageDto): Promise<Message> {
+    return this.messageService.update(id, createMessageDto);
   }
 
   @Get()
@@ -41,11 +41,6 @@ export class MessagesController {
     return this.messageService.find(chat_id, getMessageDto);
   }
 
-  @Put(':id')
-  public update(@Param('id') id: number, @Body() createMessageDto: CreateMessageDto): Promise<Message> {
-    return this.messageService.update(id, createMessageDto);
-  }
-
   @Get(':id')
   @ApiCreatedResponse({
     type: [Message]
@@ -53,6 +48,14 @@ export class MessagesController {
   public findOne(@Param('id') id: number,): Promise<Message> {
     return this.messageService.findOne(id);
   }
+
+  @Get()
+  @ApiCreatedResponse({
+    type: [Message]
+  })
+  public getMessagesOfChat(@Request() req, @Query() filterDto: GetMessagesFilterDto): Promise<Message[]> {
+    return this.messageService.getMessagesOfChat(req.user.id, filterDto);
+  }   
 
   @Delete(':id')
   public delete(@Param('id') id: number): Promise<Message> {
