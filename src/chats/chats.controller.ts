@@ -1,12 +1,8 @@
 import { GetChatsFilterDto } from './dto/get-chats-filter.dto';
 import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards, Request, Query } from '@nestjs/common';
 import { CreateChatDto, GetChatDto } from './dto/chat.dto';
-<<<<<<< HEAD
 import { GetChatsFilterDto } from './dto/get-chats-filter.dto';
 import { Chat} from './chats.entity';
-=======
-import { Chat } from './chats.entity';
->>>>>>> dev
 import { ChatsService } from './chats.service';
 import {
   ApiBearerAuth,
