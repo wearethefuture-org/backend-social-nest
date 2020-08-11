@@ -73,9 +73,7 @@ export class MessagesService {
   }
 
   public async getMessagesOfChat(userId: number, filterDto: GetMessagesFilterDto): Promise<Message[]> {
-    if(userId === owner_id) {
         return this.messagesRepository.getMessagesOfChat(filterDto);
-      }
   }
        
   public async delete(id: number): Promise<Message> {

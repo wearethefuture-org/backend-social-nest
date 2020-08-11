@@ -48,8 +48,11 @@ export class ChatsController {
   @ApiCreatedResponse({
     type: [Chat]
   })
-  public getChatsOfUser(@Request() req, @Query() getChatDto: GetChatDto, @Query() filterDto: GetChatsFilterDto): Promise<Chat[]> {
-    return this.chatService.getChatsOfUser(req.user.id, getChatDto);
+  // public getChatsOfUser(@Request() req, @Query() getChatDto: GetChatDto, @Query() filterDto: GetChatsFilterDto): Promise<Chat[]> {
+  //   return this.chatService.getChatsOfUser(req.user.id, getChatDto);
+  // }
+  public getChatsOfUser(@Query() filterDto: GetChatsFilterDto): Promise<Chat[]> {
+    return this.chatService.getChatsOfUser(filterDto);
   }
 
   @Get(':id')
