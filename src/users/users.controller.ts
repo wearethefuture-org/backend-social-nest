@@ -59,7 +59,6 @@ export class UsersController {
     }),
   )
   public uploadedFile(@UploadedFile() file, @Request() req ): Promise<File> {
-    console.log(file);
     return this.usersService.createAvatar(req.user.id, file);
   }
 
