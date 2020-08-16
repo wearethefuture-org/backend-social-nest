@@ -1,16 +1,31 @@
 import { GetUsersFilterDto } from './dto/get-users-filter.dto';
-import { Body, Controller, Delete, Get, Param, Post, Put, Query, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+  Query,
+  UploadedFile,
+  Request,
+  UseGuards,
+  UseInterceptors,
+} from '@nestjs/common';
 import { CreateUserDto } from './dto/user.dto';
 import { User } from './user.entity';
 import { UsersService } from './users.service';
-import { DeleteResult } from 'typeorm/query-builder/result/DeleteResult';
 import {
   ApiBearerAuth,
   ApiCreatedResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { UpdateResult } from 'typeorm/query-builder/result/UpdateResult';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { editFileName, imageFileFilter } from '../utils/fileUpload.utils';
+import { diskStorage } from 'multer';
+import { File } from '../files/file.entity';
 
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard)
@@ -30,9 +45,27 @@ export class UsersController {
     return this.usersService.save(createUserDto);
   }
 
+  @Post('images')
+  @ApiCreatedResponse({
+    type: File
+  })
+  @UseInterceptors(
+    FileInterceptor('file', {
+      storage: diskStorage({
+        destination: process.env.ROOT_PATH,
+        filename: editFileName,
+      }),
+      fileFilter: imageFileFilter,
+    }),
+  )
+  public uploadedFile(@UploadedFile() file, @Request() req ): Promise<File> {
+    return this.usersService.createAvatar(req.user.id, file);
+  }
+
+
   @Get()
   // @ApiCreatedResponse({
-  //   type: [User] 
+  //   type: [User]
   // })
   getUsers(@Query() filterDto: GetUsersFilterDto): Promise<User[]> {
     return this.usersService.getUsers(filterDto);
