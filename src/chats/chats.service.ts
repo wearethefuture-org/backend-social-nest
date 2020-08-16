@@ -40,15 +40,32 @@ export class ChatsService {
     });
     return updatedChat;
   }
-
   // public async getAllChats(): Promise<Chat[]> {
   //   return this.chatsRepository.find();
   // }
 
-  public async getChatsOfUser(filterDto: GetChatsFilterDto): Promise<Chat[]> {
-    return this.chatRepository.getChatsOfUser(filterDto);
-  }
+  public async getChatsWithFilters(userId: number, getChatDto: GetChatDto, filterDto: GetChatsFilterDto): Promise<Chat[]> {
+    const { search } = filterDto; 
+    let chats = await this.chatsRepository.find({
+      where : [
+        {owner_id : userId},
+        {partner_id : userId}
+    ],
+      take: getChatDto.take,
+      skip: getChatDto.skip,
+      order: { updatedAt: 'DESC'}
+    });
 
+    if(search) {
+      chats = chats.filter(chat => 
+        chat.name.includes(search),
+        );
+    }
+    
+    return chats;
+
+    //return this.chatRepository.getChatsOfUser(chats, filterDto);
+  }
 
   public async findOne(id: number): Promise<Chat> {
     const chat = await this.chatsRepository.findOne({

@@ -31,9 +31,9 @@ export class UsersController {
   }
 
   @Get()
-  // @ApiCreatedResponse({
-  //   type: [User] 
-  // })
+  @ApiCreatedResponse({
+    type: [User] 
+  })
   getUsers(@Query() filterDto: GetUsersFilterDto): Promise<User[]> {
     return this.usersService.getUsers(filterDto);
   }

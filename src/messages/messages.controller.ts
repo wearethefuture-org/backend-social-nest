@@ -33,13 +33,13 @@ export class MessagesController {
     return this.messageService.update(id, createMessageDto);
   }
 
-  @Get()
-  @ApiCreatedResponse({
-    type: [Message]
-  })
-  public find(@Query('chat_id') chat_id: number, @Query() getMessageDto: GetMessageDto): Promise<Message[]> {
-    return this.messageService.find(chat_id, getMessageDto);
-  }
+  // @Get()
+  // @ApiCreatedResponse({
+  //   type: [Message]
+  // })
+  // public find(@Query('chat_id') chat_id: number, @Query() getMessageDto: GetMessageDto): Promise<Message[]> {
+  //   return this.messageService.find(chat_id, getMessageDto);
+  // }
 
   @Get(':id')
   @ApiCreatedResponse({
@@ -53,15 +53,9 @@ export class MessagesController {
   @ApiCreatedResponse({
     type: [Message]
   })
-  public getMessagesOfChat(@Request() req, @Query() filterDto: GetMessagesFilterDto): Promise<Message[]> {
-    return this.messageService.getMessagesOfChat(req.user.id, filterDto);
+  public getMessagesOfChat(@Request() req, @Query() getMessageDto: GetMessageDto, @Query() filterDto: GetMessagesFilterDto): Promise<Message[]> {
+    return this.messageService.getMessagesOfChat(req.user.id, getMessageDto, filterDto);
   }   
-
-  // @ApiCreatedResponse({
-  //   type: [Chat]
-  // })
-  // public getChatsOfUser(@Request() req, @Query() getChatDto: GetChatDto, @Query() filterDto: GetChatsFilterDto): Promise<Chat[]> {
-  //   return this.chatService.getChatsOfUser(req.user.id, getChatDto);
 
   @Delete(':id')
   public delete(@Param('id') id: number): Promise<Message> {

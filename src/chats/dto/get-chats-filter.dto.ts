@@ -4,4 +4,5 @@ export class GetChatsFilterDto {
   @IsOptional()
   @IsNotEmpty()
   search: string;
+
 }

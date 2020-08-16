@@ -1,4 +1,3 @@
-import { GetChatsFilterDto } from './dto/get-chats-filter.dto';
 import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards, Request, Query } from '@nestjs/common';
 import { CreateChatDto, GetChatDto } from './dto/chat.dto';
 import { GetChatsFilterDto } from './dto/get-chats-filter.dto';
@@ -40,15 +39,13 @@ export class ChatsController {
 
   //'getChats()' return all the chats which are associated with the user 
   // provided through 'userID' by the request  
+  
   @Get()
   @ApiCreatedResponse({
     type: [Chat]
   })
-  // public getChatsOfUser(@Request() req, @Query() getChatDto: GetChatDto, @Query() filterDto: GetChatsFilterDto): Promise<Chat[]> {
-  //   return this.chatService.getChatsOfUser(req.user.id, getChatDto);
-  // }
-  public getChatsOfUser(@Query() filterDto: GetChatsFilterDto): Promise<Chat[]> {
-    return this.chatService.getChatsOfUser(filterDto);
+  public getChats(@Request() req, @Query() getChatDto: GetChatDto, @Query() filterDto: GetChatsFilterDto): Promise<Chat[]> {
+    return this.chatService.getChatsWithFilters(req.user.id, getChatDto, filterDto);
   }
 
   @Get(':id')
