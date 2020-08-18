@@ -1,7 +1,7 @@
 import { EntityRepository, Repository } from "typeorm";
 import { Chat } from './chats.entity';
 import { GetChatsFilterDto } from './dto/get-chats-filter.dto';
-import { GetChatDto } from './dto/chat.dto';
+
 
 @EntityRepository(Chat)
 export class ChatRepository extends Repository<Chat> {
@@ -20,4 +20,3 @@ export class ChatRepository extends Repository<Chat> {
   }
 }
 
-//Try to use TypeORM QueryBuilder and make some inner joins to filter projects that does not belong to selected user
