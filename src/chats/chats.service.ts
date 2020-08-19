@@ -42,7 +42,7 @@ export class ChatsService {
   }
 
   public async getAllChats(userId: number, getChatDto: GetChatDto): Promise<Chat[]> {
-    return this.chatsRepository.find({
+    const chats = await this.chatsRepository.find({
       where : [
         {owner_id : userId},
         {partner_id : userId}
@@ -51,30 +51,21 @@ export class ChatsService {
       skip: getChatDto.skip,
       order: { updatedAt: 'DESC'}
     });
+    return chats;
   }
 
   public async getChatsWithFilters(userId: number, getChatDto: GetChatDto, filterDto: GetChatsFilterDto): Promise<Chat[]> {
     const { search } = filterDto; 
-    let chats = await this.chatsRepository.find({
-      where : [
-        {owner_id : userId},
-        {partner_id : userId}
-    ],
-      take: getChatDto.take,
-      skip: getChatDto.skip,
-      order: { updatedAt: 'DESC'}
-    });
+    let chats = await this.getAllChats(userId, getChatDto);
 
     if(search) {
       chats = chats.filter(chat => 
-        chat.name.includes(search),
+        chat.name.includes( search ),
         );
     }
     
     return chats;
   }
-
-//return this.chatRepository.getChatsOfUser(chats, filterDto);
 
   public async findOne(id: number): Promise<Chat> {
     const chat = await this.chatsRepository.findOne({
