@@ -34,7 +34,11 @@ export class ChatsController {
     type: [Chat]
   })
   public getChats(@Request() req, @Query() getChatDto: GetChatDto, @Query() filterDto: GetChatsFilterDto): Promise<Chat[]> {
-    return this.chatService.getChatsWithFilters(req.user.id, getChatDto, filterDto);
+    if(Object.keys(filterDto).length) {
+      return this.chatService.getChatsWithFilters(req.user.id, getChatDto, filterDto);
+    } else {
+      return this.chatService.getAllChats(req.user.id, getChatDto);
+    }
   }
 
   @Get(':id')
