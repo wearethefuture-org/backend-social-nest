@@ -4,7 +4,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/user.dto';
 import { User } from './user.entity';
-import { GetUsersFilterDto } from './dto/get-users-filter.dto';
 import { File } from '../files/file.entity';
 
 @Injectable()
@@ -40,14 +39,18 @@ export class UsersService {
       throw new HttpException('User with this ID not found', HttpStatus.NOT_FOUND);
     }
     this.usersRepository.update({id}, createUserDto);
-    const updatedUser = await this.usersRepository.findOne({
+    return await this.usersRepository.findOne({
       where: { id }
     });
-    return updatedUser;
   }
 
-  async getUsers(filterDto: GetUsersFilterDto): Promise<User[]> {
-    return this.userRepository.getUsers(filterDto);
+
+  public async getUsers(): Promise<User[]> {
+    const users = await this.usersRepository.find();
+    if (!users) {
+      throw new HttpException('Users not found', HttpStatus.NOT_FOUND);
+    }
+    return users;
   }
 
   public async findOne(id: number): Promise<User> {
@@ -55,7 +58,7 @@ export class UsersService {
       where: { id }
     });
     if (!user) {
-      throw new HttpException('Chat with this ID not found', HttpStatus.NOT_FOUND);
+      throw new HttpException('User with this ID not found', HttpStatus.NOT_FOUND);
     }
     return user;
   }
@@ -65,7 +68,7 @@ export class UsersService {
       where: { id }
     });
     if (!user) {
-      throw new HttpException('Chat with this ID not found', HttpStatus.NOT_FOUND);
+      throw new HttpException('User with this ID not found', HttpStatus.NOT_FOUND);
     }
     await this.usersRepository.delete(id);
     return user;

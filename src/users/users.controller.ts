@@ -64,11 +64,8 @@ export class UsersController {
 
 
   @Get()
-  // @ApiCreatedResponse({
-  //   type: [User]
-  // })
   getUsers(@Query() filterDto: GetUsersFilterDto): Promise<User[]> {
-    return this.usersService.getUsers(filterDto);
+    return this.usersService.getUsers();
   }
 
   @Put(':id')
