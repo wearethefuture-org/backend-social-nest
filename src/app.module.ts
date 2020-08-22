@@ -15,7 +15,8 @@ import * as path from "path";
       //rootPath: process.env.PUBLIC_DIR ,
       rootPath: process.env.PUBLIC_DIR || path.join(__dirname, '../public'),
       //serveRoot: process.env.SERVE_ROOT
-      serveRoot: ""
+      // serveRoot: ""
+      exclude: ['/api*']
     }),
     ConfigModule.forRoot(),
     TypeOrmModule.forRoot({
