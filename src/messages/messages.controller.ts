@@ -53,9 +53,13 @@ export class MessagesController {
   @ApiCreatedResponse({
     type: [Message]
   })
-  public getMessagesOfChat(@Request() req, @Query() getMessageDto: GetMessageDto, @Query() filterDto: GetMessagesFilterDto): Promise<Message[]> {
-    return this.messageService.getMessagesOfChat(req.user.id, getMessageDto, filterDto);
-  }   
+  public getMessagesOfChat(@Query('chat_id') chat_id: number, @Query() getMessageDto: GetMessageDto, @Query() filterDto: GetMessagesFilterDto): Promise<Message[]> {
+    if(Object.keys(filterDto).length) {
+      return this.messageService.getMessagesWithFilters(chat_id, getMessageDto, filterDto);
+    } else {
+      return this.messageService.getAllMessages(chat_id, getMessageDto);
+    }
+  }
 
   @Delete(':id')
   public delete(@Param('id') id: number): Promise<Message> {

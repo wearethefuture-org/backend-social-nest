@@ -45,21 +45,21 @@ export class MessagesService {
     return updatedMessage;
   }
 
-  public async find(chat_id: number, getMessageDto: GetMessageDto): Promise<Message[]> {
-    console.log('finding', chat_id);
-    const  messages = await this.messageRepository.find({
-      where: { chat_id },
-      take: getMessageDto.take,
-      skip: getMessageDto.skip
-    })
-    console.log(messages);
-    if (!messages.length) {
-      throw new HttpException('Chat is Empty', HttpStatus.NO_CONTENT)
-    } else {
-      return messages;
-    }
-    // add skip and other query
-  }
+  // public async find(chat_id: number, getMessageDto: GetMessageDto): Promise<Message[]> {
+  //   console.log('finding', chat_id);
+  //   const  messages = await this.messageRepository.find({
+  //     where: { chat_id },
+  //     take: getMessageDto.take,
+  //     skip: getMessageDto.skip
+  //   })
+  //   console.log(messages);
+  //   if (!messages.length) {
+  //     throw new HttpException('Chat is Empty', HttpStatus.NO_CONTENT)
+  //   } else {
+  //     return messages;
+  //   }
+  //   // add skip and other query
+  // }
   
   public async findOne(id: number): Promise<Message> {
     const message = await this.messageRepository.findOne({
@@ -72,49 +72,34 @@ export class MessagesService {
     return message;
   }
 
-  public async getMessagesOfChat(userId: number, getMessageDto: GetMessageDto, filterDto: GetMessagesFilterDto): Promise<Message[]> {
-    const { search } = filterDto;
-    const query = this.messageRepository.createQueryBuilder('message');
-  if({owner_id : userId}) {
-    
-    query.where('text ILIKE :search', { search: `%${search}%`});
+  public async getAllMessages(chat_id: number, getMessageDto: GetMessageDto): Promise<Message[]> {
+    const messages = await this.messageRepository.find({
+      where : { chat_id },
+      take: getMessageDto.take,
+      skip: getMessageDto.skip,
+    });
+    if (!messages.length) {
+      throw new HttpException('Chat is Empty', HttpStatus.NO_CONTENT)
+    } else {
+      return messages;
+    }
   }
-  const messages = await query.getMany();
 
+  public async getMessagesWithFilters(chat_id: number, getMessageDto: GetMessageDto, filterDto: GetMessagesFilterDto): Promise<Message[]> {
+    const { search } = filterDto;
+  let messages = await this.getAllMessages(chat_id, getMessageDto);
+
+  if(search) {
+    messages = messages.filter(message => 
+      message.text.toLowerCase().includes( search.toLowerCase() ),
+      );
+  }
+  // if (!messageslength) {
+  //   throw new HttpException('Messages matching your search not found', HttpStatus.NOT_FOUND);
+  // }
   return messages;
 }
 
-
-
-
-    //   return this.messageRepository.find({
-  //     where : [
-  //       {owner_id : userId},
-  //       {partner_id : userId}
-  //   ],
-  //     take: getMessageDto.take,
-  //     skip: getMessageDto.skip,
-  //     order: { updatedAt: 'DESC'}
-  //   });
-  // }
-
-  
-    //   const messages = await this.messageRepository.find({
-  //     where : [
-  //       {owner_id : userId},
-  //       ],
-  //       take: getMessageDto.take,
-  //       skip: getMessageDto.skip,
-  //       order: { updatedAt: 'DESC'}
-  //   });
-  //   if(!messages) {
-  //     throw new HttpException(`message not found`, HttpStatus.NOT_FOUND);
-  //   } else {
-  //     return this.messagesRepository.getMessagesOfChat(filterDto);
-  //   }
-  // }
-       
-         
   public async delete(id: number): Promise<Message> {
     const message = await this.messageRepository.findOne({
       where: { id }

@@ -57,9 +57,12 @@ export class ChatsService {
 
     if(search) {
       chats = chats.filter(chat => 
-        chat.name.includes( search ),
+        chat.name.toLowerCase().includes( search.toLowerCase() ),
         );
     }
+    // if (!chats.length) {
+    //   throw new HttpException('Chats matching your search not found', HttpStatus.NOT_FOUND);
+    // }
     return chats;
   }
 

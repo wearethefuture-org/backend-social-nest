@@ -68,7 +68,7 @@ export class UsersController {
     type: [User] 
   })
   getUsers(@Query() filterDto: GetUsersFilterDto): Promise<User[]> {
-    return this.usersService.getUsers();
+    return this.usersService.getUsers(filterDto);
   }
 
   @Put(':id')

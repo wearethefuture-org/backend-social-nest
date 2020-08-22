@@ -2,7 +2,7 @@ import { IsOptional, IsNotEmpty, IsArray } from 'class-validator';
 
 export class GetMessagesFilterDto {
   @IsOptional()
-  @IsNotEmpty()
+  //@IsNotEmpty()
   search: string;
 
   @IsOptional()
