@@ -26,6 +26,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { editFileName, imageFileFilter } from '../utils/fileUpload.utils';
 import { diskStorage } from 'multer';
 import { File } from '../files/file.entity';
+import * as path from "path";
 
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard)
@@ -52,7 +53,7 @@ export class UsersController {
   @UseInterceptors(
     FileInterceptor('file', {
       storage: diskStorage({
-        destination: process.env.PUBLIC_DIR,
+        destination: process.env.PUBLIC_DIR || path.join(__dirname, '../../../public'),
         filename: editFileName,
       }),
       fileFilter: imageFileFilter,
