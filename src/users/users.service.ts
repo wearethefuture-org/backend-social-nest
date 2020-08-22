@@ -21,7 +21,7 @@ export class UsersService {
     const createAvatar = await this.fileRepository.save({
       name: file.filename,
      // url: `${process.env.URL}:${process.env.PORT}${process.env.SERVE_ROOT}/${file.filename}`,
-      url: `${process.env.URL}:/${file.filename}`,
+      url: `${process.env.URL}/${file.filename}`,
     });
     await this.usersRepository.save({ id: userId, avatar: createAvatar });
     return createAvatar;
