@@ -11,7 +11,7 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 @Module({
   imports: [
     ServeStaticModule.forRoot({
-      rootPath: process.env.ROOT_PATH,
+      rootPath: process.env.PUBLIC_DIR,
       serveRoot: process.env.SERVE_ROOT
     }),
     ConfigModule.forRoot(),
