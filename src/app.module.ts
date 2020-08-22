@@ -13,7 +13,7 @@ import * as path from "path";
   imports: [
     ServeStaticModule.forRoot({
       //rootPath: process.env.PUBLIC_DIR ,
-      rootPath: process.env.PUBLIC_DIR || path.join(__dirname, '../public'),
+      rootPath: process.env.PUBLIC_DIR || path.join(__dirname, '../../public'),
       //serveRoot: process.env.SERVE_ROOT
       serveRoot: '/static',
       exclude: ['/api*']
