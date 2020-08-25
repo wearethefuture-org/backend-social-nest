@@ -32,15 +32,7 @@ export class MessagesController {
   public update(@Param('id') id: number, @Body() createMessageDto: CreateMessageDto): Promise<Message> {
     return this.messageService.update(id, createMessageDto);
   }
-
-  // @Get()
-  // @ApiCreatedResponse({
-  //   type: [Message]
-  // })
-  // public find(@Query('chat_id') chat_id: number, @Query() getMessageDto: GetMessageDto): Promise<Message[]> {
-  //   return this.messageService.find(chat_id, getMessageDto);
-  // }
-
+  
   @Get(':id')
   @ApiCreatedResponse({
     type: [Message]
@@ -48,6 +40,14 @@ export class MessagesController {
   public findOne(@Param('id') id: number,): Promise<Message> {
     return this.messageService.findOne(id);
   }
+
+// @Get()
+  // @ApiCreatedResponse({
+  //   type: [Message]
+  // })
+  // public find(@Query('chat_id') chat_id: number, @Query() getMessageDto: GetMessageDto): Promise<Message[]> {
+  //   return this.messageService.find(chat_id, getMessageDto);
+  // }
 
   @Get()
   @ApiCreatedResponse({

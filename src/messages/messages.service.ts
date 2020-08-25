@@ -87,13 +87,16 @@ export class MessagesService {
 
   public async getMessagesWithFilters(chat_id: number, getMessageDto: GetMessageDto, filterDto: GetMessagesFilterDto): Promise<Message[]> {
     const { search } = filterDto;
+    console.log(chat_id);
+    console.log(search);
   let messages = await this.getAllMessages(chat_id, getMessageDto);
-
+  
   if(search) {
-    messages = messages.filter(message => 
+      messages = messages.filter(message => 
       message.text.toLowerCase().includes( search.toLowerCase() ),
       );
   }
+  //console.log(search);
   // if (!messageslength) {
   //   throw new HttpException('Messages matching your search not found', HttpStatus.NOT_FOUND);
   // }
