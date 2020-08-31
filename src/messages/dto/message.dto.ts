@@ -30,4 +30,5 @@ export class GetMessageDto {
   })
   @IsString()
   public order?: string = 'ASC';
-}
+
+  }

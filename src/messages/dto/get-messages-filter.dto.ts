@@ -1,7 +1,8 @@
 import { IsOptional, IsNotEmpty } from 'class-validator';
 
 export class GetMessagesFilterDto {
+  
   @IsOptional()
-  //@IsNotEmpty()
+  @IsNotEmpty()
   search: string;
 }
