@@ -41,14 +41,6 @@ export class MessagesController {
     return this.messageService.findOne(id);
   }
 
-// @Get()
-  // @ApiCreatedResponse({
-  //   type: [Message]
-  // })
-  // public find(@Query('chat_id') chat_id: number, @Query() getMessageDto: GetMessageDto): Promise<Message[]> {
-  //   return this.messageService.find(chat_id, getMessageDto);
-  // }
-
   @Get()
   @ApiCreatedResponse({
     type: [Message]
@@ -57,7 +49,7 @@ export class MessagesController {
     console.log(chat_id);
     console.log(getMessageDto);
     console.log(filterDto);
-    if(Object.keys(filterDto).length) {
+    if(Object(filterDto.search).length) {
       return this.messageService.getMessagesWithFilters(chat_id, getMessageDto, filterDto);
     } else {
       return this.messageService.getAllMessages(chat_id, getMessageDto);

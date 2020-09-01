@@ -88,19 +88,21 @@ export class MessagesService {
   public async getMessagesWithFilters(chat_id: number, getMessageDto: GetMessageDto, filterDto: GetMessagesFilterDto): Promise<Message[]> {
     const { search } = filterDto;
     console.log(search);
+
     let messages = await this.getAllMessages(chat_id, getMessageDto);
-   
     if(search) {
       messages = messages.filter(message => 
       message.text.toLowerCase().includes( search.toLowerCase() ),
-    );
-    // if (!messages.length) {
-    //   throw new HttpException('Messages matching your search not found', HttpStatus.NOT_FOUND);
-    // }
-      }
-  return messages;
+      );
+      } else {
+        messages = messages.slice();
+      } 
+      // if (!messages.length) {
+      // throw new HttpException('Messages matching your search not found', HttpStatus.NO_CONTENT);
+      // }
+      return messages;
     }
-
+      
   public async delete(id: number): Promise<Message> {
     const message = await this.messageRepository.findOne({
       where: { id }
