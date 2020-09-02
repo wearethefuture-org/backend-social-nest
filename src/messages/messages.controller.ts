@@ -46,14 +46,7 @@ export class MessagesController {
     type: [Message]
   })
   public getMessagesOfChat(@Query('chat_id') chat_id: number, @Query() filterDto: GetMessagesFilterDto, @Query() getMessageDto: GetMessageDto): Promise<Message[]> {
-    console.log(chat_id);
-    console.log(getMessageDto);
-    console.log(filterDto);
-    if(Object(filterDto.search).length) {
       return this.messageService.getMessagesWithFilters(chat_id, getMessageDto, filterDto);
-    } else {
-      return this.messageService.getAllMessages(chat_id, getMessageDto);
-    }
   }
 
   @Delete(':id')

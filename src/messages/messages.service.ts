@@ -73,6 +73,7 @@ export class MessagesService {
   }
 
   public async getAllMessages(chat_id: number, getMessageDto: GetMessageDto): Promise<Message[]> {
+
     const messages = await this.messageRepository.find({
       where : { chat_id },
       take: getMessageDto.take,
@@ -87,19 +88,16 @@ export class MessagesService {
 
   public async getMessagesWithFilters(chat_id: number, getMessageDto: GetMessageDto, filterDto: GetMessagesFilterDto): Promise<Message[]> {
     const { search } = filterDto;
-    console.log(search);
 
     let messages = await this.getAllMessages(chat_id, getMessageDto);
     if(search) {
       messages = messages.filter(message => 
       message.text.toLowerCase().includes( search.toLowerCase() ),
       );
-      } else {
-        messages = messages.slice();
       } 
-      // if (!messages.length) {
-      // throw new HttpException('Messages matching your search not found', HttpStatus.NO_CONTENT);
-      // }
+      if (!messages.length) {
+      throw new HttpException('Messages matching your search not found', HttpStatus.NO_CONTENT);
+      }
       return messages;
     }
       
