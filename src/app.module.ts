@@ -7,12 +7,16 @@ import { ChatsModule } from './chats/chats.module';
 import { AuthModule } from './auth/auth.module';
 import { MessagesModule } from './messages/messages.module'
 import { ServeStaticModule } from '@nestjs/serve-static';
+import * as path from "path";
 
 @Module({
   imports: [
     ServeStaticModule.forRoot({
-      rootPath: process.env.ROOT_PATH,
-      serveRoot: process.env.SERVE_ROOT
+      //rootPath: process.env.PUBLIC_DIR ,
+      rootPath: process.env.PUBLIC_DIR || path.join(__dirname, '../../public'),
+      //serveRoot: process.env.SERVE_ROOT
+      serveRoot: '/static',
+      exclude: ['/api*']
     }),
     ConfigModule.forRoot(),
     TypeOrmModule.forRoot({
