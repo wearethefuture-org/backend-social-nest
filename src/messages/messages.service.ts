@@ -4,7 +4,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateMessageDto, GetMessageDto } from './dto/message.dto';
 import { Message } from './messages.entity';
-import { MessagesRepository } from './messages.repository';
 import { Chat } from 'src/chats/chats.entity';
 import { GetMessagesFilterDto } from './dto/get-messages-filter.dto';
 
@@ -13,8 +12,6 @@ export class MessagesService {
   constructor(
     @InjectRepository(Message)
     private messageRepository: Repository<Message>,
-    @InjectRepository(MessagesRepository)
-    private messagesRepository: MessagesRepository,
     @InjectRepository(Chat)
     private chatRepository: Repository<Chat>,
     private gateway: AppGateway,
