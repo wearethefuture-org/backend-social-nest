@@ -6,6 +6,8 @@ import { AuthService } from './auth.service';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { LocalStrategy } from './strategies/local.strategy';
 import { AuthController } from './auth.controller';
+import {TypeOrmModule} from "@nestjs/typeorm";
+import {ResetPasswordKeyEntity} from "./reset-password-key.entity";
 
 @Module({
   imports: [
@@ -17,6 +19,7 @@ import { AuthController } from './auth.controller';
         expiresIn: process.env.EXPIRES_IN,
       },
     }),
+    TypeOrmModule.forFeature([ResetPasswordKeyEntity])
   ],
   controllers: [
     AuthController,
