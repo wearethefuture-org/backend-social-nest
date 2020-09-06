@@ -5,6 +5,7 @@ import { Repository } from 'typeorm';
 import { CreateMessageDto, GetMessageDto } from './dto/message.dto';
 import { Message } from './messages.entity';
 import { Chat } from 'src/chats/chats.entity';
+import { GetMessagesFilterDto } from './dto/get-messages-filter.dto';
 
 @Injectable()
 export class MessagesService {
@@ -40,23 +41,7 @@ export class MessagesService {
     });
     return updatedMessage;
   }
-
-  public async find(chat_id: number, getMessageDto: GetMessageDto): Promise<Message[]> {
-    console.log('finding', chat_id);
-    const  messages = await this.messageRepository.find({
-      where: { chat_id },
-      take: getMessageDto.take,
-      skip: getMessageDto.skip
-    })
-    console.log(messages);
-    if (!messages.length) {
-      throw new HttpException('Chat is Empty', HttpStatus.NO_CONTENT)
-    } else {
-      return messages;
-    }
-    // add skip and other query
-  }
-
+  
   public async findOne(id: number): Promise<Message> {
     const message = await this.messageRepository.findOne({
       where: { id }
@@ -68,6 +53,35 @@ export class MessagesService {
     return message;
   }
 
+  public async getAllMessages(chat_id: number, getMessageDto: GetMessageDto): Promise<Message[]> {
+
+    const messages = await this.messageRepository.find({
+      where : { chat_id },
+      take: getMessageDto.take,
+      skip: getMessageDto.skip,
+    });
+    if (!messages.length) {
+      throw new HttpException('Chat is Empty', HttpStatus.NO_CONTENT)
+    } else {
+      return messages;
+    }
+  }
+
+  public async getMessagesWithFilters(chat_id: number, getMessageDto: GetMessageDto, filterDto: GetMessagesFilterDto): Promise<Message[]> {
+    const { search } = filterDto;
+
+    let messages = await this.getAllMessages(chat_id, getMessageDto);
+    if(search) {
+      messages = messages.filter(message => 
+      message.text.toLowerCase().includes( search.toLowerCase() ),
+      );
+    } 
+    if (!messages.length) {
+      throw new HttpException('Messages matching your search not found', HttpStatus.NO_CONTENT);
+    }
+    return messages;
+  }
+      
   public async delete(id: number): Promise<Message> {
     const message = await this.messageRepository.findOne({
       where: { id }

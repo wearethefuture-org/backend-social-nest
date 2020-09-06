@@ -4,7 +4,6 @@ import { Repository } from 'typeorm';
 import { CreateChatDto, GetChatDto } from './dto/chat.dto';
 import { Chat } from './chats.entity';
 import { User } from 'src/users/user.entity';
-import { ChatRepository } from './chat.repository';
 import { GetChatsFilterDto } from './dto/get-chats-filter.dto';
 
 @Injectable()
@@ -12,8 +11,6 @@ export class ChatsService {
   constructor(
     @InjectRepository(Chat)
     private chatsRepository: Repository<Chat>,
-    @InjectRepository(ChatRepository)
-    private chatRepository: ChatRepository,
     @InjectRepository(User)
     private usersRepository: Repository<User>,
   ) {
@@ -41,20 +38,32 @@ export class ChatsService {
     return updatedChat;
   }
 
-  // public async getAllChats(): Promise<Chat[]> {
-  //   return this.chatsRepository.find();
-  // }
-
-  public async getChatsOfUser(userID: number, getChatDto: GetChatDto): Promise<Chat[]> {
-    return this.chatsRepository.find({
+  public async getAllChats(userId: number, getChatDto: GetChatDto): Promise<Chat[]> {
+    const chats = await this.chatsRepository.find({
       where : [
-        {owner_id : userID},
-        {partner_id : userID}
+        {owner_id : userId},
+        {partner_id : userId}
     ],
       take: getChatDto.take,
       skip: getChatDto.skip,
       order: { updatedAt: 'DESC'}
     });
+    return chats;
+  }
+
+  public async getChatsWithFilters(userId: number, getChatDto: GetChatDto, filterDto: GetChatsFilterDto): Promise<Chat[]> {
+    const { search } = filterDto; 
+    let chats = await this.getAllChats(userId, getChatDto);
+
+    if(search) {
+      chats = chats.filter(chat => 
+        chat.name.toLowerCase().includes( search.toLowerCase() ),
+        );
+    }
+    if (!chats.length) {
+      throw new HttpException('Chats matching your search not found', HttpStatus.NOT_FOUND);
+    }
+    return chats;
   }
 
   public async findOne(id: number): Promise<Chat> {

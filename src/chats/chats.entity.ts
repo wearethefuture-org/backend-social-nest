@@ -39,7 +39,7 @@ export class Chat {
   @ManyToOne(() => User, (user: User) => user.id, {
     eager: true
   })
-  @JoinColumn({name: 'ownerId'})
+  @JoinColumn({name: 'owner_id'})
   public owner: User;
 
   @Column()
@@ -48,7 +48,7 @@ export class Chat {
   @ManyToOne(() => User, (user: User) => user.id, {
     eager: true
   })
-  @JoinColumn({name: 'partnerId'})
+  @JoinColumn({name: 'partner_id'})
   public partner: User;
 
   @Column()
