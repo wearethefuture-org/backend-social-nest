@@ -41,22 +41,6 @@ export class MessagesService {
     });
     return updatedMessage;
   }
-
-  // public async find(chat_id: number, getMessageDto: GetMessageDto): Promise<Message[]> {
-  //   console.log('finding', chat_id);
-  //   const  messages = await this.messageRepository.find({
-  //     where: { chat_id },
-  //     take: getMessageDto.take,
-  //     skip: getMessageDto.skip
-  //   })
-  //   console.log(messages);
-  //   if (!messages.length) {
-  //     throw new HttpException('Chat is Empty', HttpStatus.NO_CONTENT)
-  //   } else {
-  //     return messages;
-  //   }
-  //   // add skip and other query
-  // }
   
   public async findOne(id: number): Promise<Message> {
     const message = await this.messageRepository.findOne({
@@ -91,12 +75,12 @@ export class MessagesService {
       messages = messages.filter(message => 
       message.text.toLowerCase().includes( search.toLowerCase() ),
       );
-      } 
-      if (!messages.length) {
+    } 
+    if (!messages.length) {
       throw new HttpException('Messages matching your search not found', HttpStatus.NO_CONTENT);
-      }
-      return messages;
     }
+    return messages;
+  }
       
   public async delete(id: number): Promise<Message> {
     const message = await this.messageRepository.findOne({

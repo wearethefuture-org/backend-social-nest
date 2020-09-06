@@ -47,11 +47,11 @@ export class UsersService {
 
 
   public async getUsers(filterDto: GetUsersFilterDto): Promise<User[]> {
-  //   const users = await this.usersRepository.find();
-  //   if (!users) {
-  //     throw new HttpException('Users not found', HttpStatus.NOT_FOUND);
-  //   }
-  //   return users;
+  // const users = await this.usersRepository.find();
+  // if (!users) {
+  //   throw new HttpException('Users not found', HttpStatus.NOT_FOUND);
+  // }
+  // return users;
   // }
   return this.userRepository.getUsers(filterDto);
   }

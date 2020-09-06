@@ -60,9 +60,9 @@ export class ChatsService {
         chat.name.toLowerCase().includes( search.toLowerCase() ),
         );
     }
-    // if (!chats.length) {
-    //   throw new HttpException('Chats matching your search not found', HttpStatus.NOT_FOUND);
-    // }
+    if (!chats.length) {
+      throw new HttpException('Chats matching your search not found', HttpStatus.NOT_FOUND);
+    }
     return chats;
   }
 
