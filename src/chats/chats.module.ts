@@ -3,6 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ChatsController } from './chats.controller';
 import { ChatsService } from './chats.service';
 import { ChatsGateway } from './chats.gateway';
+import { ChatRepository } from './chat.repository';
 import { Chat } from './chats.entity';
 import { User } from 'src/users/user.entity';
 import { File } from 'src/files/file.entity';
@@ -10,7 +11,7 @@ import { File } from 'src/files/file.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Chat, File, User]),
+    TypeOrmModule.forFeature([Chat, File, User, ChatRepository]),
   ],
   providers: [ 
     // ChatsGateway,

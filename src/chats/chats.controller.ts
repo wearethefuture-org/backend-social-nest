@@ -1,7 +1,7 @@
+import { GetChatsFilterDto } from './dto/get-chats-filter.dto';
 import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards, Request, Query } from '@nestjs/common';
 import { CreateChatDto, GetChatDto } from './dto/chat.dto';
-import { GetChatsFilterDto } from './dto/get-chats-filter.dto';
-import { Chat} from './chats.entity';
+import { Chat } from './chats.entity';
 import { ChatsService } from './chats.service';
 import {
   ApiBearerAuth,
@@ -28,17 +28,24 @@ export class ChatsController {
   public create(@Body() createChatDto: CreateChatDto, @Request() req) : Promise<Chat> {
     return this.chatService.create(req.user.id, createChatDto);
   }
+
+  // @Get()
+  // @ApiCreatedResponse({
+  //   type: [Chat]
+  // })
+  // public getAll(@Query() getChatDto: GetChatDto): Promise<Chat[]> {
+  //   return this.chatService.getAllChats();
+  // }
+
+  //'getChats()' return all the chats which are associated with the user 
+  // provided through 'userID' by the request 
   
   @Get()
   @ApiCreatedResponse({
     type: [Chat]
   })
-  public getChats(@Request() req, @Query() getChatDto: GetChatDto, @Query() filterDto: GetChatsFilterDto): Promise<Chat[]> {
-    if(Object.keys(filterDto).length) {
-      return this.chatService.getChatsWithFilters(req.user.id, getChatDto, filterDto);
-    } else {
-      return this.chatService.getAllChats(req.user.id, getChatDto);
-    }
+  public getChatsOfUser(@Request() req, @Query() getChatDto: GetChatDto, @Query() filterDto: GetChatsFilterDto): Promise<Chat[]> {
+    return this.chatService.getChatsOfUser(req.user.id, getChatDto);
   }
 
   @Get(':id')
