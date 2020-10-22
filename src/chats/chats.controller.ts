@@ -28,17 +28,6 @@ export class ChatsController {
   public create(@Body() createChatDto: CreateChatDto, @Request() req) : Promise<Chat> {
     return this.chatService.create(req.user.id, createChatDto);
   }
-
-  // @Get()
-  // @ApiCreatedResponse({
-  //   type: [Chat]
-  // })
-  // public getAll(@Query() getChatDto: GetChatDto): Promise<Chat[]> {
-  //   return this.chatService.getAllChats();
-  // }
-
-  //'getChats()' return all the chats which are associated with the user 
-  // provided through 'userID' by the request 
   
   @Get()
   @ApiCreatedResponse({

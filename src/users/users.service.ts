@@ -1,4 +1,5 @@
 import { UserRepository } from './user.repository';
+import { GetUsersFilterDto } from './dto/get-users-filter.dto';
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -45,9 +46,9 @@ export class UsersService {
   }
 
 
-  public async getUsers(): Promise<User[]> {
+  public async getUsers(filterDto: GetUsersFilterDto): Promise<User[]> {
     const users = await this.usersRepository.find();
-    if (!users) {
+    if (!users || !users.length) {
       throw new HttpException('Users not found', HttpStatus.NOT_FOUND);
     }
     return users;

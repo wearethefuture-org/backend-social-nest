@@ -31,8 +31,8 @@ export class MessagesController {
   @ApiCreatedResponse({
     type: [Message]
   })
-  public find(@Query('chat_id') chat_id: number, @Query() getMessageDto: GetMessageDto): Promise<Message[]> {
-    return this.messageService.find(chat_id, getMessageDto);
+  public find(@Query('chatId') chatId: number, @Query() getMessageDto: GetMessageDto): Promise<Message[]> {
+    return this.messageService.find(chatId, getMessageDto);
   }
 
   @Put(':id')

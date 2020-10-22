@@ -41,15 +41,11 @@ export class ChatsService {
     return updatedChat;
   }
 
-// public async getAllChats(): Promise<Chat[]> {
-  //   return this.chatsRepository.find();
-  // }
-
-  public async getChatsOfUser(userID: number, getChatDto: GetChatDto): Promise<Chat[]> {
+  public async getChatsOfUser(userId: number, getChatDto: GetChatDto): Promise<Chat[]> {
     return this.chatsRepository.find({
       where : [
-        {owner_id : userID},
-        {partner_id : userID}
+        {owner_id : userId},
+        {partner_id : userId}
     ],
       take: getChatDto.take,
       skip: getChatDto.skip,
