@@ -1,11 +1,11 @@
 import { UserRepository } from './user.repository';
+import { GetUsersFilterDto } from './dto/get-users-filter.dto';
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/user.dto';
 import { User } from './user.entity';
 import { File } from '../files/file.entity';
-import { GetUsersFilterDto } from './dto/get-users-filter.dto';
 @Injectable()
 export class UsersService {
   constructor(
@@ -47,13 +47,11 @@ export class UsersService {
 
 
   public async getUsers(filterDto: GetUsersFilterDto): Promise<User[]> {
-  // const users = await this.usersRepository.find();
-  // if (!users) {
-  //   throw new HttpException('Users not found', HttpStatus.NOT_FOUND);
-  // }
-  // return users;
-  // }
-  return this.userRepository.getUsers(filterDto);
+    const users = await this.usersRepository.find();
+    if (!users || !users.length) {
+      throw new HttpException('Users not found', HttpStatus.NOT_FOUND);
+    }
+    return users;
   }
 
   public async findOne(id: number): Promise<User> {

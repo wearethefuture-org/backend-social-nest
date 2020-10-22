@@ -5,11 +5,10 @@ import { Message } from './messages.entity';
 import { MessagesController } from './messages.controller';
 import { MessagesService } from './messages.service';
 import { Chat } from '../chats/chats.entity';
-import { User } from '../users/user.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Message, Chat, User]),
+    TypeOrmModule.forFeature([Message, Chat]),
   ],
   providers: [
     MessagesService,
