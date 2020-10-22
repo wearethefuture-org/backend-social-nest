@@ -41,9 +41,9 @@ export class MessagesService {
     return updatedMessage;
   }
 
-  public async find(chat_id: number, getMessageDto: GetMessageDto): Promise<Message[]> {
+  public async find(chatId: number, getMessageDto: GetMessageDto): Promise<Message[]> {
     const  messages = await this.messageRepository.find({
-      where: { chat_id },
+      where: { chatId },
       take: getMessageDto.take,
       skip: getMessageDto.skip
     })
