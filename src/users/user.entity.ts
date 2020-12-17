@@ -107,6 +107,14 @@ export class User {
   public disabled: boolean;
 
   @Column({
+    name: 'privateUser',
+    insert: true,
+    default: false
+  })
+  @ApiProperty()
+  public privateUser: boolean;
+
+  @Column({
     name: 'birthday_date'
   })
   @ApiProperty()
