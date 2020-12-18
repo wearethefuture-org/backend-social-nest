@@ -13,7 +13,7 @@ import {
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
-import { CreateUserDto } from './dto/user.dto';
+import { CreateUserDto, EditUserDto } from './dto/user.dto';
 import { User } from './user.entity';
 import { UsersService } from './users.service';
 import {
@@ -73,8 +73,8 @@ export class UsersController {
   }
 
   @Put(':id')
-  public update(@Param('id') id: number, @Body() createUserDto: CreateUserDto): Promise<User> {
-    return this.usersService.update(id, createUserDto);
+  public update(@Request() req, @Param('id') id: number, @Body() editUserDto: EditUserDto): Promise<User> {
+    return this.usersService.update(req.user, id, editUserDto);
   }
 
   @Get(':id')
