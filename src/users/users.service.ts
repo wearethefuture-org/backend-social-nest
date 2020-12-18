@@ -47,7 +47,7 @@ export class UsersService {
     if (isAuthUserId || isSuperAdmin) {
       this.usersRepository.update({ id }, editUserDto);
     } else {
-      throw new HttpException('User with this ID not authorized', HttpStatus.UNAUTHORIZED);
+      throw new HttpException('The user does not have access to change user data with this ID', HttpStatus.FORBIDDEN);
     }
     return await this.usersRepository.findOne({
       where: { id }
@@ -56,12 +56,6 @@ export class UsersService {
 
 
   public async getUsers(filterDto: GetUsersFilterDto): Promise<User[]> {
-    // const users = await this.usersRepository.find();
-    // if (!users) {
-    //   throw new HttpException('Users not found', HttpStatus.NOT_FOUND);
-    // }
-    // return users;
-    // }
     return this.userRepository.getUsers(filterDto);
   }
 
