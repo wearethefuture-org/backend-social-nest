@@ -21,16 +21,16 @@ import * as path from "path";
     }),
     MailerModule.forRoot({
       transport: {
-        host: process.env.MAIL_HOST,
-        port: 587,
-        secure: false, // upgrade later with STARTTLS
+        host: process.env.SMTP_HOST,
+        port: process.env.SMTP_PORT,
+        secure: process.env.SMTP_SECURE, // upgrade later with STARTTLS
         auth: {
-          user: process.env.MAIL_USER,
-          pass: process.env.MAIL_PASS,
+          user: process.env.SMTP_AUTH_USER,
+          pass: process.env.SMTP_AUTH_PASS,
         },
       },
       defaults: {
-        from: process.env.MAIL_FROM,
+        from: process.env.SMTP_AUTH_USER,
       },
     }),
     ConfigModule.forRoot(),
