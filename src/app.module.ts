@@ -7,6 +7,7 @@ import { ChatsModule } from './chats/chats.module';
 import { AuthModule } from './auth/auth.module';
 import { MessagesModule } from './messages/messages.module'
 import { ServeStaticModule } from '@nestjs/serve-static';
+import { MailerModule } from '@nestjs-modules/mailer';
 import * as path from "path";
 
 @Module({
@@ -17,6 +18,20 @@ import * as path from "path";
       //serveRoot: process.env.SERVE_ROOT
       serveRoot: '/static',
       exclude: ['/api*']
+    }),
+    MailerModule.forRoot({
+      transport: {
+        host: process.env.SMTP_HOST,
+        port: process.env.SMTP_PORT,
+        secure: process.env.SMTP_SECURE, // upgrade later with STARTTLS
+        auth: {
+          user: process.env.SMTP_AUTH_USER,
+          pass: process.env.SMTP_AUTH_PASS,
+        },
+      },
+      defaults: {
+        from: process.env.SMTP_AUTH_USER,
+      },
     }),
     ConfigModule.forRoot(),
     TypeOrmModule.forRoot({
