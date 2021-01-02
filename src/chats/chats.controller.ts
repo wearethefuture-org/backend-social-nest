@@ -28,7 +28,7 @@ export class ChatsController {
   public create(@Body() createChatDto: CreateChatDto, @Request() req) : Promise<Chat> {
     return this.chatService.create(req.user.id, createChatDto);
   }
-  
+
   @Get()
   @ApiCreatedResponse({
     type: [Chat]

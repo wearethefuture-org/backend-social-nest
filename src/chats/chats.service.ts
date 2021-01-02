@@ -18,9 +18,20 @@ export class ChatsService {
 
   public async create(userId: number, data: CreateChatDto): Promise<Chat> {
     const user = await this.usersRepository.findOne({where: {id: data.partner_id}})
+
     if (!user) {
       throw new HttpException('partner ID does not exist', HttpStatus.BAD_REQUEST);
     }
+
+    if(await this.chatsRepository.findOne({
+      where: [
+          {owner_id : userId},
+          {partner_id : data.partner_id}
+          ]
+    })){
+      throw new HttpException('Chat with this user already exists.', HttpStatus.BAD_REQUEST);
+    }
+
     return await this.chatsRepository.save({ownerId: userId, ...data});
   }
 
@@ -48,15 +59,20 @@ export class ChatsService {
       skip: getChatDto.skip,
       order: { updatedAt: 'DESC'}
     });
+
+    if (!chats) {
+      throw new HttpException('No more data for you', HttpStatus.NOT_FOUND);
+    }
+
     return chats;
   }
 
   public async getChatsWithFilters(userId: number, getChatDto: GetChatDto, filterDto: GetChatsFilterDto): Promise<Chat[]> {
-    const { search } = filterDto; 
+    const { search } = filterDto;
     let chats = await this.getAllChats(userId, getChatDto);
 
     if(search) {
-      chats = chats.filter(chat => 
+      chats = chats.filter(chat =>
         chat.name.toLowerCase().includes( search.toLowerCase() ),
         );
     }
