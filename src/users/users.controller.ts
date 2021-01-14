@@ -1,4 +1,4 @@
-import { GetUsersFilterDto } from './dto/get-users-filter.dto';
+import { GetCountersFilterDto, GetUsersFilterDto } from './dto/get-users-filter.dto';
 import {
   Body,
   Controller,
@@ -70,6 +70,16 @@ export class UsersController {
   })
   getUsers(@Query() filterDto: GetUsersFilterDto): Promise<User[]> {
     return this.usersService.getUsers(filterDto);
+  }
+
+  @Get('counters')
+  public getDataAnalytic(@Query() req: GetCountersFilterDto): Promise<object> {
+    return this.usersService.getDataAnalytic(req);
+  }
+  
+  @Get('counters/:id')
+  public getCounters(@Param('id') id: number): Promise<object> {
+    return this.usersService.getCounters(id);
   }
 
   @Put(':id')
