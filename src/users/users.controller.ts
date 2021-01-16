@@ -1,4 +1,3 @@
-import { GetCountersFilterDto, GetUsersFilterDto } from './dto/get-users-filter.dto';
 import {
   Body,
   Controller,
@@ -13,34 +12,29 @@ import {
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
-import { CreateUserDto } from './dto/user.dto';
+import { ApiBearerAuth, ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { diskStorage } from 'multer';
+import * as path from 'path';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { User } from './user.entity';
 import { UsersService } from './users.service';
-import {
-  ApiBearerAuth,
-  ApiCreatedResponse,
-  ApiTags,
-} from '@nestjs/swagger';
-import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-import { FileInterceptor } from '@nestjs/platform-express';
-import { editFileName, imageFileFilter } from '../utils/fileUpload.utils';
-import { diskStorage } from 'multer';
 import { File } from '../files/file.entity';
-import * as path from "path";
+import { editFileName, imageFileFilter } from '../utils/fileUpload.utils';
+import { CreateUserDto } from './dto/user.dto';
+import { GetUsersFilterDto } from './dto/get-users-filter.dto';
+import { AnalyticsFilterDto } from '../analytics/dto/analytics-filter.dto';
 
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard)
 @ApiTags('Users')
 @Controller('users')
 export class UsersController {
-  constructor(
-    private readonly usersService: UsersService,
-  ) {
-  }
+  constructor(private readonly usersService: UsersService) {}
 
   @Post()
   @ApiCreatedResponse({
-    type: User
+    type: User,
   })
   public create(@Body() createUserDto: CreateUserDto): Promise<User> {
     return this.usersService.save(createUserDto);
@@ -48,48 +42,51 @@ export class UsersController {
 
   @Post('images')
   @ApiCreatedResponse({
-    type: File
+    type: File,
   })
   @UseInterceptors(
     FileInterceptor('file', {
       storage: diskStorage({
-        destination: process.env.PUBLIC_DIR || path.join(__dirname, '../../../public'),
+        destination:
+          process.env.PUBLIC_DIR || path.join(__dirname, '../../../public'),
         filename: editFileName,
       }),
       fileFilter: imageFileFilter,
     }),
   )
-  public uploadedFile(@UploadedFile() file, @Request() req ): Promise<File> {
+  public uploadedFile(@UploadedFile() file, @Request() req): Promise<File> {
     return this.usersService.createAvatar(req.user.id, file);
   }
 
-
   @Get()
   @ApiCreatedResponse({
-    type: [User] 
+    type: [User],
   })
   getUsers(@Query() filterDto: GetUsersFilterDto): Promise<User[]> {
     return this.usersService.getUsers(filterDto);
   }
 
-  @Get('counters')
-  public getDataAnalytic(@Query() req: GetCountersFilterDto): Promise<object> {
+  @Get('analytics')
+  public getDataAnalytic(@Query() req: AnalyticsFilterDto): Promise<object> {
     return this.usersService.getDataAnalytic(req);
   }
-  
-  @Get('counters/:id')
+
+  @Get('analytics/:id')
   public getCounters(@Param('id') id: number): Promise<object> {
     return this.usersService.getCounters(id);
   }
 
   @Put(':id')
-  public update(@Param('id') id: number, @Body() createUserDto: CreateUserDto): Promise<User> {
+  public update(
+    @Param('id') id: number,
+    @Body() createUserDto: CreateUserDto,
+  ): Promise<User> {
     return this.usersService.update(id, createUserDto);
   }
 
   @Get(':id')
   @ApiCreatedResponse({
-    type: [User]
+    type: [User],
   })
   public findOne(@Param('id') id: number): Promise<User> {
     return this.usersService.findOne(id);

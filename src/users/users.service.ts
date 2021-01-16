@@ -6,8 +6,10 @@ import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/user.dto';
 import { User } from './user.entity';
 import { File } from '../files/file.entity';
-import { GetUsersFilterDto, GetCountersFilterDto } from './dto/get-users-filter.dto';
+import { GetUsersFilterDto } from './dto/get-users-filter.dto';
 import { MessagesRepository } from 'src/messages/messages.repository';
+import { AnalyticsFilterDto } from 'src/analytics/dto/analytics-filter.dto';
+import { AnalyticsFilterNameEnum } from 'src/analytics/analytics.enum';
 
 @Injectable()
 export class UsersService {
@@ -72,6 +74,7 @@ export class UsersService {
     const user = await this.usersRepository.findOne({
       where: { id }
     });
+
     if (!user) {
       throw new HttpException('User with this ID not found', HttpStatus.NOT_FOUND);
     }
@@ -83,34 +86,35 @@ export class UsersService {
     return this.usersRepository.findOne({ email });
   }
 
-  public async getDataAnalytic(filterDto: GetCountersFilterDto): Promise<object> {
-    const result = {
-      countAllUsers: null,
-      countSelectUsers: null,
-      countUsers: null,
-      countSelectChats: null,
-      countChats: null
+  public async getDataAnalytic(filterDto: AnalyticsFilterDto): Promise<object> {
+    const analytics: {
+      countAllUsers?: number;
+      countSelectUsers?: number;
+      countUsers?: object;
+      countSelectChats?: number;
+      countChats?: object;
+    } = {};
+
+    analytics.countAllUsers = await this.usersRepository.count();
+
+    if (filterDto.name === AnalyticsFilterNameEnum.users) {
+      analytics.countSelectUsers = await this.userRepository.getCountSelectUsers(filterDto);
+      analytics.countUsers = await this.userRepository.getCountUsers(filterDto);
     }
 
-    result.countAllUsers = await this.usersRepository.count();
-
-    if (filterDto.name === "users") {
-      result.countSelectUsers = await this.userRepository.getCountSelectUsers(filterDto);
-      result.countUsers = await this.userRepository.getCountUsers(filterDto);
+    if (filterDto.name === AnalyticsFilterNameEnum.chats) {
+      analytics.countSelectChats = await this.chatsRepository.getCountSelectChats(filterDto);
+      analytics.countChats = await this.chatsRepository.getCountChats(filterDto);
     }
 
-    if (filterDto.name === "chats") {
-      result.countSelectChats = await this.chatsRepository.getCountSelectChats(filterDto);
-      result.countChats = await this.chatsRepository.getCountChats(filterDto);
-    }
-
-    return result;
+    return analytics;
   }
 
   public async getCounters(id: number): Promise<object> {
 
-    const countChats = await this.chatsRepository.getCountChatsUser(id);
+    await this.findOne(id);
 
+    const countChats = await this.chatsRepository.getCountChatsUser(id);
     const countMessages = await this.messagesRepository.getCountMessagesUser(id);
 
     return { countChats, countMessages };
