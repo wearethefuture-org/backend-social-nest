@@ -88,24 +88,23 @@ export class UsersService {
 
   public async getDataAnalytic(filterDto: AnalyticsFilterDto): Promise<object> {
     const analytics: {
-      countAllUsers?: number;
-      countSelectUsers?: number;
+      totalCount?: number;
+      countSelect?: number;
       countUsers?: object;
-      countSelectChats?: number;
       countChats?: object;
     } = {};
 
-    analytics.countAllUsers = await this.usersRepository.count();
-
     if (filterDto.name === AnalyticsFilterNameEnum.users) {
-      analytics.countSelectUsers = await this.userRepository.getCountSelectUsers(filterDto);
+      analytics.totalCount = await this.usersRepository.count();
+      analytics.countSelect = await this.userRepository.getCountSelectUsers(filterDto);
       analytics.countUsers = await this.userRepository.getCountUsers(filterDto);
+
+      return analytics;
     }
 
-    if (filterDto.name === AnalyticsFilterNameEnum.chats) {
-      analytics.countSelectChats = await this.chatsRepository.getCountSelectChats(filterDto);
-      analytics.countChats = await this.chatsRepository.getCountChats(filterDto);
-    }
+    analytics.totalCount = await this.chatsRepository.count();
+    analytics.countSelect = await this.chatsRepository.getCountSelectChats(filterDto);
+    analytics.countChats = await this.chatsRepository.getCountChats(filterDto);
 
     return analytics;
   }
