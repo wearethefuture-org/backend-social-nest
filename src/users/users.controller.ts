@@ -13,10 +13,6 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
-import { CreateUserDto, EditUserDto } from './dto/user.dto';
-import { User } from './user.entity';
-import { UsersService } from './users.service';
-import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import * as path from 'path';
@@ -25,7 +21,7 @@ import { User } from './user.entity';
 import { UsersService } from './users.service';
 import { File } from '../files/file.entity';
 import { editFileName, imageFileFilter } from '../utils/fileUpload.utils';
-import { CreateUserDto } from './dto/user.dto';
+import { CreateUserDto, EditUserDto } from './dto/user.dto';
 import { GetUsersFilterDto } from './dto/get-users-filter.dto';
 import { AnalyticsFilterDto } from '../analytics/dto/analytics-filter.dto';
 
