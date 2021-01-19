@@ -13,6 +13,10 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
+import { CreateUserDto, EditUserDto } from './dto/user.dto';
+import { User } from './user.entity';
+import { UsersService } from './users.service';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import * as path from 'path';
@@ -77,11 +81,8 @@ export class UsersController {
   }
 
   @Put(':id')
-  public update(
-    @Param('id') id: number,
-    @Body() createUserDto: CreateUserDto,
-  ): Promise<User> {
-    return this.usersService.update(id, createUserDto);
+  public update(@Request() req, @Param('id') id: number, @Body() editUserDto: EditUserDto): Promise<User> {
+    return this.usersService.update(req.user, id, editUserDto);
   }
 
   @Get(':id')
