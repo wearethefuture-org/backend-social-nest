@@ -44,6 +44,24 @@ export class CreateUserDto {
   public disabled?: boolean = false;
 }
 
+export class EditUserDto {
+  @ApiProperty()
+  @IsString()
+  public firstName: string;
+
+  @ApiProperty()
+  @IsString()
+  public lastName: string;
+
+  @ApiProperty()
+  @IsEmail()
+  public email: string;
+
+  @ApiProperty()
+  @IsString()
+  public userName: string;
+}
+
 export class GetUserDto {
   @ApiProperty()
   @IsNumber()
