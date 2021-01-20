@@ -13,75 +13,107 @@ export class ChatsService {
     private chatsRepository: Repository<Chat>,
     @InjectRepository(User)
     private usersRepository: Repository<User>,
-  ) {
-  }
+  ) {}
 
   public async create(userId: number, data: CreateChatDto): Promise<Chat> {
-    const user = await this.usersRepository.findOne({where: {id: data.partner_id}})
+    const user = await this.usersRepository.findOne({
+      where: { id: data.partner_id },
+    });
+    const chat = await this.chatsRepository.findOne({
+      where: { name: data.name, owner_id: userId, partner_id: data.partner_id },
+    });
+
     if (!user) {
-      throw new HttpException('partner ID does not exist', HttpStatus.BAD_REQUEST);
+      throw new HttpException(
+        'partner ID does not exist',
+        HttpStatus.BAD_REQUEST,
+      );
     }
-    return await this.chatsRepository.save({ownerId: userId, ...data});
+
+    if (chat) {
+      return chat;
+    }
+
+    return await this.chatsRepository.save({ ownerId: userId, ...data });
   }
 
-  public async update(id: number, createChatDto: Partial <CreateChatDto>): Promise<Chat> {
+  public async update(
+    id: number,
+    createChatDto: Partial<CreateChatDto>,
+  ): Promise<Chat> {
     const chat = await this.chatsRepository.findOne({
-      where: { id }
+      where: { id },
     });
     if (!chat) {
-      throw new HttpException('Chat with this ID not found', HttpStatus.NOT_FOUND);
+      throw new HttpException(
+        'Chat with this ID not found',
+        HttpStatus.NOT_FOUND,
+      );
     }
-    this.chatsRepository.update({id}, createChatDto);
+    this.chatsRepository.update({ id }, createChatDto);
     const updatedChat = await this.chatsRepository.findOne({
-      where: { id }
+      where: { id },
     });
     return updatedChat;
   }
 
-  public async getAllChats(userId: number, getChatDto: GetChatDto): Promise<Chat[]> {
+  public async getAllChats(
+    userId: number,
+    getChatDto: GetChatDto,
+  ): Promise<Chat[]> {
     const chats = await this.chatsRepository.find({
-      where : [
-        {owner_id : userId},
-        {partner_id : userId}
-    ],
+      where: [{ owner_id: userId }, { partner_id: userId }],
       take: getChatDto.take,
       skip: getChatDto.skip,
-      order: { updatedAt: 'DESC'}
+      order: { updatedAt: 'DESC' },
     });
     return chats;
   }
 
-  public async getChatsWithFilters(userId: number, getChatDto: GetChatDto, filterDto: GetChatsFilterDto): Promise<Chat[]> {
-    const { search } = filterDto; 
+  public async getChatsWithFilters(
+    userId: number,
+    getChatDto: GetChatDto,
+    filterDto: GetChatsFilterDto,
+  ): Promise<Chat[]> {
+    const { search } = filterDto;
     let chats = await this.getAllChats(userId, getChatDto);
 
-    if(search) {
-      chats = chats.filter(chat => 
-        chat.name.toLowerCase().includes( search.toLowerCase() ),
-        );
+    if (search) {
+      chats = chats.filter(chat =>
+        chat.name.toLowerCase().includes(search.toLowerCase()),
+      );
     }
     if (!chats.length) {
-      throw new HttpException('Chats matching your search not found', HttpStatus.NOT_FOUND);
+      throw new HttpException(
+        'Chats matching your search not found',
+        HttpStatus.NOT_FOUND,
+      );
     }
     return chats;
   }
 
   public async findOne(id: number): Promise<Chat> {
     const chat = await this.chatsRepository.findOne({
-      where: { id }
+      where: { id },
     });
     if (!chat) {
-      throw new HttpException('Chat with this ID not found', HttpStatus.NOT_FOUND);
+      throw new HttpException(
+        'Chat with this ID not found',
+        HttpStatus.NOT_FOUND,
+      );
     }
     return chat;
   }
 
   public async delete(id: number): Promise<Chat> {
     const chat = await this.chatsRepository.findOne({
-      where: { id }
+      where: { id },
     });
     if (!chat) {
-      throw new HttpException('Chat with this ID not found', HttpStatus.NOT_FOUND);
+      throw new HttpException(
+        'Chat with this ID not found',
+        HttpStatus.NOT_FOUND,
+      );
     }
     await this.chatsRepository.delete(id);
     return chat;
