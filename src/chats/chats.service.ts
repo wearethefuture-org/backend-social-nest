@@ -23,7 +23,7 @@ export class ChatsService {
     if (!user) {
       throw new HttpException(
         'partner ID does not exist',
-        HttpStatus.BAD_REQUEST,
+        HttpStatus.NOT_FOUND,
       );
     }
 
