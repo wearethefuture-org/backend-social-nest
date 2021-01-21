@@ -3,7 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './user.entity';
 import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
-import { UserRepository } from './user.repository'
+import { UserRepository } from './user.repository';
 import { MulterModule } from '@nestjs/platform-express';
 import { File } from '../files/file.entity';
 
@@ -14,15 +14,8 @@ import { File } from '../files/file.entity';
       dest: 'static/uploads',
     }),
   ],
-  providers: [
-    UsersService,
-  ],
-  controllers: [
-    UsersController,
-  ],
-  exports: [
-    UsersService,
-  ],
+  providers: [UsersService],
+  controllers: [UsersController],
+  exports: [UsersService],
 })
-export class UsersModule {
-}
+export class UsersModule {}

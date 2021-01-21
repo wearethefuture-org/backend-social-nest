@@ -1,5 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString, IsInt, IsBoolean, IsEmail, IsNumber, IsDate } from 'class-validator';
+import {
+  IsString,
+  IsInt,
+  IsBoolean,
+  IsEmail,
+  IsNumber,
+  IsDate,
+} from 'class-validator';
 import { UserRoleEnum, UserStatusEnum } from '../user.enum';
 
 export class CreateUserDto {
@@ -28,13 +35,13 @@ export class CreateUserDto {
   public password: string;
 
   @ApiProperty({
-    enum: UserStatusEnum
+    enum: UserStatusEnum,
   })
   @IsString()
   public status?: string = UserStatusEnum.pending;
 
   @ApiProperty({
-    enum: UserRoleEnum
+    enum: UserRoleEnum,
   })
   @IsString()
   public role?: string = UserRoleEnum.user;
@@ -58,13 +65,13 @@ export class GetUserDto {
   public sortField?: string = 'id';
 
   @ApiProperty({
-    enum: ['ASC', 'DSC']
+    enum: ['ASC', 'DSC'],
   })
   @IsString()
   public direction?: string = 'ASC';
 
   @ApiProperty({
-    enum: [true, false]
+    enum: [true, false],
   })
   @IsBoolean()
   public onlyUsers?: boolean = true;

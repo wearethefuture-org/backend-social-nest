@@ -12,8 +12,8 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { File } from '../files/file.entity';
-import { Message } from '../messages/messages.entity'
-import { Chat } from '../chats/chats.entity'
+import { Message } from '../messages/messages.entity';
+import { Chat } from '../chats/chats.entity';
 import { ApiProperty } from '@nestjs/swagger';
 import { UserRoleEnum, UserStatusEnum } from './user.enum';
 import { fromEventPattern } from 'rxjs';
@@ -34,7 +34,7 @@ export class User {
     {
       eager: true,
       nullable: true,
-    }
+    },
   )
   @JoinColumn({
     name: 'avatar_id',
@@ -80,10 +80,10 @@ export class User {
     name: 'status',
     enum: UserStatusEnum,
     insert: true,
-    default: UserStatusEnum.pending
+    default: UserStatusEnum.pending,
   })
   @ApiProperty({
-    enum: UserStatusEnum
+    enum: UserStatusEnum,
   })
   public status: string;
 
@@ -91,35 +91,35 @@ export class User {
     name: 'role',
     enum: UserRoleEnum,
     insert: true,
-    default: UserRoleEnum.user
+    default: UserRoleEnum.user,
   })
   @ApiProperty({
-    enum: UserRoleEnum
+    enum: UserRoleEnum,
   })
   public role: string;
 
   @Column({
     name: 'disabled',
     insert: true,
-    default: false
+    default: false,
   })
   @ApiProperty()
   public disabled: boolean;
 
   @Column({
-    name: 'birthday_date'
+    name: 'birthday_date',
   })
   @ApiProperty()
   public birthdayDate: Date;
 
   @CreateDateColumn({
-    name: 'created_at'
+    name: 'created_at',
   })
   @ApiProperty()
   public createdAt: Date;
 
   @UpdateDateColumn({
-    name: 'updated_at'
+    name: 'updated_at',
   })
   @ApiProperty()
   public updatedAt: Date;
@@ -131,11 +131,15 @@ export class User {
   @JoinTable()
   categories: Chat[];
 
-  @OneToMany(() => Chat, (chat: Chat) => chat.id, {
-    // eager: true,
-    nullable : true
-  })
-  @JoinColumn({name: 'chat_id'})
+  @OneToMany(
+    () => Chat,
+    (chat: Chat) => chat.id,
+    {
+      // eager: true,
+      nullable: true,
+    },
+  )
+  @JoinColumn({ name: 'chat_id' })
   public chat_id: Chat;
 
   // @Column()

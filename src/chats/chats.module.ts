@@ -7,21 +7,13 @@ import { Chat } from './chats.entity';
 import { User } from 'src/users/user.entity';
 import { File } from 'src/files/file.entity';
 
-
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([Chat, File, User]),
-  ],
-  providers: [ 
+  imports: [TypeOrmModule.forFeature([Chat, File, User])],
+  providers: [
     // ChatsGateway,
     ChatsService,
   ],
-  controllers: [
-    ChatsController
-  ],
-  exports: [
-    ChatsService,
-  ]
+  controllers: [ChatsController],
+  exports: [ChatsService],
 })
-export class ChatsModule {
-}
+export class ChatsModule {}
