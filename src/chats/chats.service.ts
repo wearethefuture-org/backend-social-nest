@@ -16,13 +16,9 @@ export class ChatsService {
   ) {}
 
   public async create(userId: number, data: CreateChatDto): Promise<Chat> {
-<<<<<<< HEAD
     const user = await this.usersRepository.findOne({
       where: { id: data.partner_id },
     });
-=======
-    const user = await this.usersRepository.findOne({where: {id: data.partner_id}})
->>>>>>> 82433871a12353d9516daeb7affbc15a8cceae7f
 
     if (!user) {
       throw new HttpException(
@@ -42,20 +38,7 @@ export class ChatsService {
       );
     }
 
-<<<<<<< HEAD
     return await this.chatsRepository.save({ ownerId: userId, ...data });
-=======
-    if(await this.chatsRepository.findOne({
-      where: [
-          {owner_id : userId},
-          {partner_id : data.partner_id}
-          ]
-    })){
-      throw new HttpException('Chat with this user already exists.', HttpStatus.BAD_REQUEST);
-    }
-
-    return await this.chatsRepository.save({ownerId: userId, ...data});
->>>>>>> 82433871a12353d9516daeb7affbc15a8cceae7f
   }
 
   public async update(
@@ -96,7 +79,6 @@ export class ChatsService {
     return chats;
   }
 
-<<<<<<< HEAD
   public async getChatsWithFilters(
     userId: number,
     getChatDto: GetChatDto,
@@ -109,16 +91,6 @@ export class ChatsService {
       chats = chats.filter(chat =>
         chat.name.toLowerCase().includes(search.toLowerCase()),
       );
-=======
-  public async getChatsWithFilters(userId: number, getChatDto: GetChatDto, filterDto: GetChatsFilterDto): Promise<Chat[]> {
-    const { search } = filterDto;
-    let chats = await this.getAllChats(userId, getChatDto);
-
-    if(search) {
-      chats = chats.filter(chat =>
-        chat.name.toLowerCase().includes( search.toLowerCase() ),
-        );
->>>>>>> 82433871a12353d9516daeb7affbc15a8cceae7f
     }
     if (!chats.length) {
       throw new HttpException(
