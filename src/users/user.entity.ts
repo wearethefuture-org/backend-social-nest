@@ -98,13 +98,13 @@ export class User {
   })
   public role: string;
 
-  @Column({
-    name: 'disabled',
-    insert: true,
-    default: false
-  })
+  @Column({default: false})
   @ApiProperty()
-  public disabled: boolean;
+  public disabled!: boolean;
+
+  @Column({default: false})
+  @ApiProperty()
+  public privateUser!: boolean;
 
   @Column({
     name: 'birthday_date'
