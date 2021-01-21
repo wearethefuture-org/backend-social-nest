@@ -54,7 +54,7 @@ export class ChatsService {
         HttpStatus.NOT_FOUND,
       );
     }
-    this.chatsRepository.update({ id }, createChatDto);
+    await this.chatsRepository.update({ id }, createChatDto);
     const updatedChat = await this.chatsRepository.findOne({
       where: { id },
     });

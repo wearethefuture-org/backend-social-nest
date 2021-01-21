@@ -10,7 +10,6 @@ import { File } from 'src/files/file.entity';
 @Module({
   imports: [TypeOrmModule.forFeature([Chat, File, User])],
   providers: [
-    // ChatsGateway,
     ChatsService,
   ],
   controllers: [ChatsController],

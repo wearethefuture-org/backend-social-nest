@@ -70,9 +70,7 @@ export class User {
   @ApiProperty()
   public email: string;
 
-  @Column({
-    // select: false,
-  })
+  @Column()
   @ApiProperty()
   public password: string;
 
@@ -124,9 +122,6 @@ export class User {
   @ApiProperty()
   public updatedAt: Date;
 
-  // @OneToMany(() => Message, (message: Message) => message.user)
-  //   messages: Message[];
-
   @ManyToMany(type => Chat)
   @JoinTable()
   categories: Chat[];
@@ -135,13 +130,10 @@ export class User {
     () => Chat,
     (chat: Chat) => chat.id,
     {
-      // eager: true,
       nullable: true,
     },
   )
   @JoinColumn({ name: 'chat_id' })
   public chat_id: Chat;
 
-  // @Column()
-  // public chats_id: number;
 }
