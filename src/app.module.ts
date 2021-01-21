@@ -5,9 +5,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from './users/users.module';
 import { ChatsModule } from './chats/chats.module';
 import { AuthModule } from './auth/auth.module';
-import { MessagesModule } from './messages/messages.module'
+import { MessagesModule } from './messages/messages.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
-import * as path from "path";
+import * as path from 'path';
 
 @Module({
   imports: [
@@ -16,7 +16,7 @@ import * as path from "path";
       rootPath: process.env.PUBLIC_DIR || path.join(__dirname, '../../public'),
       //serveRoot: process.env.SERVE_ROOT
       serveRoot: '/static',
-      exclude: ['/api*']
+      exclude: ['/api*'],
     }),
     ConfigModule.forRoot(),
     TypeOrmModule.forRoot({
@@ -28,7 +28,6 @@ import * as path from "path";
       database: process.env.DATABASE_NAME,
       autoLoadEntities: true,
       synchronize: true,
-
     }),
     AuthModule,
     UsersModule,

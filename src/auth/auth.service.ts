@@ -11,8 +11,7 @@ export class AuthService {
   constructor(
     private readonly usersService: UsersService,
     private readonly jwtService: JwtService,
-  ) {
-  }
+  ) {}
 
   public async validate(email: string, password: string): Promise<any> {
     const user = await this.usersService.getUserByEmail(email);
@@ -31,7 +30,7 @@ export class AuthService {
   }
 
   public async login(user: User, authLoginDto: AuthLoginDto) {
-    const payload = {user, email: authLoginDto.email};
+    const payload = { user, email: authLoginDto.email };
 
     return {
       token: this.jwtService.sign(payload),
@@ -39,7 +38,7 @@ export class AuthService {
   }
 
   public async payload(payload) {
-    const user = await this.usersService.getUserByEmail(payload.email)
+    const user = await this.usersService.getUserByEmail(payload.email);
 
     if (!user) {
       throw new HttpException('Invalid token', HttpStatus.UNAUTHORIZED);
@@ -49,7 +48,7 @@ export class AuthService {
   }
 
   public async register(createUserDto: CreateUserDto): Promise<User> {
-    const user = await this.usersService.getUserByEmail(createUserDto.email)
+    const user = await this.usersService.getUserByEmail(createUserDto.email);
 
     if (user) {
       throw new HttpException('User already exists', HttpStatus.BAD_REQUEST);

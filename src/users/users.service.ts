@@ -21,22 +21,16 @@ export class UsersService {
     private userRepository: UserRepository,
     @InjectRepository(File)
     private readonly fileRepository: Repository<File>,
-    @InjectRepository(ChatsRepository)
-    private chatsRepository: ChatsRepository,
-    @InjectRepository(MessagesRepository)
-    private readonly messagesRepository: MessagesRepository,
-  ) {
-  }
+  ) {}
+
   public async createAvatar(userId: number, file: any): Promise<File> {
     const createAvatar = await this.fileRepository.save({
       name: file.filename,
       url: `${process.env.URL}/static/${file.filename}`,
-      // url: `${process.env.URL}/${file.filename}`,
     });
     await this.usersRepository.save({ id: userId, avatar: createAvatar });
     return createAvatar;
   }
-
 
   public async save(createUserDto: CreateUserDto): Promise<User> {
     return this.usersRepository.save(createUserDto);
@@ -47,11 +41,14 @@ export class UsersService {
     const isSuperAdmin = authUser.role === UserRoleEnum.superadmin;
 
     const user = await this.usersRepository.findOne({
-      where: { id }
+      where: { id },
     });
     
     if (!user) {
-      throw new HttpException('User with this ID not found', HttpStatus.NOT_FOUND);
+      throw new HttpException(
+        'User with this ID not found',
+        HttpStatus.NOT_FOUND,
+      );
     }
     
     if (isAuthUserId || isSuperAdmin) {
@@ -61,10 +58,9 @@ export class UsersService {
     }
 
     return await this.usersRepository.findOne({
-      where: { id }
+      where: { id },
     });
   }
-
 
   public async getUsers(filterDto: GetUsersFilterDto): Promise<User[]> {
     return this.userRepository.getUsers(filterDto);
@@ -72,22 +68,28 @@ export class UsersService {
 
   public async findOne(id: number): Promise<User> {
     const user = await this.usersRepository.findOne({
-      where: { id }
+      where: { id },
     });
 
     if (!user) {
-      throw new HttpException('User with this ID not found', HttpStatus.NOT_FOUND);
+      throw new HttpException(
+        'User with this ID not found',
+        HttpStatus.NOT_FOUND,
+      );
     }
     return user;
   }
 
   public async delete(id: number): Promise<User> {
     const user = await this.usersRepository.findOne({
-      where: { id }
+      where: { id },
     });
 
     if (!user) {
-      throw new HttpException('User with this ID not found', HttpStatus.NOT_FOUND);
+      throw new HttpException(
+        'User with this ID not found',
+        HttpStatus.NOT_FOUND,
+      );
     }
     await this.usersRepository.delete(id);
     return user;

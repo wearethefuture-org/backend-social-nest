@@ -4,7 +4,7 @@ import { IsString, IsInt, IsNumber } from 'class-validator';
 export class CreateChatDto {
   @ApiProperty()
   @IsString()
-  public name: string ='My Chat';
+  public name: string = 'My Chat';
 
   @ApiProperty()
   @IsString()
@@ -29,7 +29,7 @@ export class GetChatDto {
   public sortField?: string = 'id';
 
   @ApiProperty({
-    enum: ['ASC', 'DSC']
+    enum: ['ASC', 'DSC'],
   })
   @IsString()
   public order?: string = 'DSC';

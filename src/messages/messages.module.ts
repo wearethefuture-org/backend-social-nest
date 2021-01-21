@@ -8,19 +8,9 @@ import { Chat } from '../chats/chats.entity';
 import { User } from '../users/user.entity';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([Message, Chat, User]),
-  ],
-  providers: [
-    MessagesService,
-    AppGateway,
-  ],
-  controllers: [
-    MessagesController,
-  ],
-  exports: [
-    MessagesService,
-  ],
+  imports: [TypeOrmModule.forFeature([Message, Chat, User])],
+  providers: [MessagesService, AppGateway],
+  controllers: [MessagesController],
+  exports: [MessagesService],
 })
-export class MessagesModule {
-}
+export class MessagesModule {}
