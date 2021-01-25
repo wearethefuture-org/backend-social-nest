@@ -13,7 +13,6 @@ export class CreateChatsDto {
   @ApiProperty()
   @IsBoolean()
   public available?: boolean = true;
-
 }
 export class GetChatsDto {
   @ApiProperty()
@@ -27,6 +26,4 @@ export class GetChatsDto {
   @ApiProperty()
   @IsBoolean()
   public isGlobal?: boolean = false;
-
 }
-

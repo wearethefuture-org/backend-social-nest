@@ -77,7 +77,11 @@ export class UsersController {
   }
 
   @Put(':id')
-  public update(@Request() req, @Param('id') id: number, @Body() editUserDto: EditUserDto): Promise<User> {
+  public update(
+    @Request() req,
+    @Param('id') id: number,
+    @Body() editUserDto: EditUserDto,
+  ): Promise<User> {
     return this.usersService.update(req.user, id, editUserDto);
   }
 
