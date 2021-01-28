@@ -15,12 +15,15 @@ export class ChatsService {
     private usersRepository: Repository<User>,
   ) {}
 
-  public async create(data: CreateChatDto): Promise<Chat> {
+  public async create(createChatDto: CreateChatDto): Promise<Chat> {
     const user = await this.usersRepository.findOne({
-      where: { id: data.partner_id },
+      where: { id: createChatDto.partner_id },
     });
     const chat = await this.chatsRepository.findOne({
-      where: { owner_id: data.owner_id, partner_id: data.partner_id },
+      where: {
+        owner_id: createChatDto.owner_id,
+        partner_id: createChatDto.partner_id,
+      },
     });
 
     if (!user) {
@@ -34,7 +37,10 @@ export class ChatsService {
       return chat;
     }
 
-    return await this.chatsRepository.save({ ownerId: data.owner_id, ...data });
+    return await this.chatsRepository.save({
+      ownerId: createChatDto.owner_id,
+      ...createChatDto,
+    });
   }
 
   public async update(
@@ -69,6 +75,8 @@ export class ChatsService {
       skip: getChatDto.skip,
       order: { updatedAt: 'DESC' },
     });
+    console.log(chats);
+    console.log(userId);
     return chats;
   }
 
