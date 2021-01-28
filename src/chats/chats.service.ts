@@ -19,23 +19,19 @@ export class ChatsService {
     const user = await this.usersRepository.findOne({
       where: { id: data.partner_id },
     });
+    const chat = await this.chatsRepository.findOne({
+      where: { name: data.name, owner_id: userId, partner_id: data.partner_id },
+    });
 
     if (!user) {
       throw new HttpException(
         'partner ID does not exist',
-        HttpStatus.NOT_FOUND,
+        HttpStatus.BAD_REQUEST,
       );
     }
 
-    if (
-      await this.chatsRepository.findOne({
-        where: { owner_id: userId, partner_id: data.partner_id },
-      })
-    ) {
-      throw new HttpException(
-        'Chat with this user already exists.',
-        HttpStatus.BAD_REQUEST,
-      );
+    if (chat) {
+      return chat;
     }
 
     return await this.chatsRepository.save({ ownerId: userId, ...data });
@@ -54,7 +50,7 @@ export class ChatsService {
         HttpStatus.NOT_FOUND,
       );
     }
-    await this.chatsRepository.update({ id }, createChatDto);
+    this.chatsRepository.update({ id }, createChatDto);
     const updatedChat = await this.chatsRepository.findOne({
       where: { id },
     });
@@ -71,11 +67,6 @@ export class ChatsService {
       skip: getChatDto.skip,
       order: { updatedAt: 'DESC' },
     });
-
-    if (!chats) {
-      throw new HttpException('No more data for you', HttpStatus.NOT_FOUND);
-    }
-
     return chats;
   }
 
