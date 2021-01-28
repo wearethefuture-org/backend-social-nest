@@ -13,6 +13,10 @@ export class CreateChatDto {
   @ApiProperty()
   @IsNumber()
   public partner_id: number;
+
+  @ApiProperty()
+  @IsNumber()
+  public owner_id: number;
 }
 
 export class GetChatDto {

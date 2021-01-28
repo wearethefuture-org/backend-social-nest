@@ -33,7 +33,7 @@ export class ChatsController {
     @Body() createChatDto: CreateChatDto,
     @Request() req,
   ): Promise<Chat> {
-    return this.chatService.create(req.user.id, createChatDto);
+    return this.chatService.create(createChatDto);
   }
 
   @Get()
