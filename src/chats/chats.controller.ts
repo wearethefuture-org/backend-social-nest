@@ -33,7 +33,7 @@ export class ChatsController {
     @Body() createChatDto: CreateChatDto,
     @Request() req,
   ): Promise<Chat> {
-    return this.chatService.create(req.user.id, createChatDto);
+    return this.chatService.create(createChatDto);
   }
 
   @Get()
@@ -41,18 +41,16 @@ export class ChatsController {
     type: [Chat],
   })
   public getChats(
-    @Request() req,
     @Query() getChatDto: GetChatDto,
     @Query() filterDto: GetChatsFilterDto,
-  ): Promise<Chat[]> {
+  ): Promise<Chat[]> {    
     if (Object.keys(filterDto).length) {
       return this.chatService.getChatsWithFilters(
-        req.user.id,
         getChatDto,
         filterDto,
       );
     } else {
-      return this.chatService.getAllChats(req.user.id, getChatDto);
+      return this.chatService.getAllChats(getChatDto);
     }
   }
 

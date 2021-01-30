@@ -15,19 +15,21 @@ export class ChatsService {
     private usersRepository: Repository<User>,
   ) {}
 
-  public async create(userId: number, data: CreateChatDto): Promise<Chat> {
+  public async create(createChatDto: CreateChatDto): Promise<Chat> {
     const user = await this.usersRepository.findOne({
-      where: { id: data.partner_id },
+      where: { id: createChatDto.partner_id },
     });
-
     const chat = await this.chatsRepository.findOne({
-      where: { name: data.name, owner_id: userId, partner_id: data.partner_id },
+      where: {
+        owner_id: createChatDto.owner_id,
+        partner_id: createChatDto.partner_id,
+      },
     });
 
     if (!user) {
       throw new HttpException(
         'partner ID does not exist',
-        HttpStatus.NOT_FOUND,
+        HttpStatus.BAD_REQUEST,
       );
     }
 
@@ -35,19 +37,10 @@ export class ChatsService {
       return chat;
     }
 
-    if (
-      await this.chatsRepository.findOne({
-        where: { owner_id: userId, partner_id: data.partner_id },
-      })
-    ) {
-      throw new HttpException(
-        'Chat with this user already exists.',
-        HttpStatus.BAD_REQUEST,
-      );
-
-    }
-
-    return await this.chatsRepository.save({ ownerId: userId, ...data });
+    return await this.chatsRepository.save({
+      ownerId: createChatDto.owner_id,
+      ...createChatDto,
+    });
   }
 
   public async update(
@@ -72,31 +65,24 @@ export class ChatsService {
     return updatedChat;
   }
 
-  public async getAllChats(
-    userId: number,
+  public async getAllChats(   
     getChatDto: GetChatDto,
   ): Promise<Chat[]> {
     const chats = await this.chatsRepository.find({
-      where: [{ owner_id: userId }, { partner_id: userId }],
+      where: [{ owner_id: getChatDto.id }, { partner_id: getChatDto.id }],
       take: getChatDto.take,
       skip: getChatDto.skip,
       order: { updatedAt: 'DESC' },
     });
-
-    if (!chats) {
-      throw new HttpException('No more data for you', HttpStatus.NOT_FOUND);
-    }
-
     return chats;
   }
 
   public async getChatsWithFilters(
-    userId: number,
     getChatDto: GetChatDto,
     filterDto: GetChatsFilterDto,
   ): Promise<Chat[]> {
     const { search } = filterDto;
-    let chats = await this.getAllChats(userId, getChatDto);
+    let chats = await this.getAllChats(getChatDto);
 
     if (search) {
       chats = chats.filter(chat =>
