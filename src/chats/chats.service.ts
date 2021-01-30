@@ -65,28 +65,24 @@ export class ChatsService {
     return updatedChat;
   }
 
-  public async getAllChats(
-    userId: number,
+  public async getAllChats(   
     getChatDto: GetChatDto,
   ): Promise<Chat[]> {
     const chats = await this.chatsRepository.find({
-      where: [{ owner_id: userId }, { partner_id: userId }],
+      where: [{ owner_id: getChatDto.id }, { partner_id: getChatDto.id }],
       take: getChatDto.take,
       skip: getChatDto.skip,
       order: { updatedAt: 'DESC' },
     });
-    console.log(chats);
-    console.log(userId);
     return chats;
   }
 
   public async getChatsWithFilters(
-    userId: number,
     getChatDto: GetChatDto,
     filterDto: GetChatsFilterDto,
   ): Promise<Chat[]> {
     const { search } = filterDto;
-    let chats = await this.getAllChats(userId, getChatDto);
+    let chats = await this.getAllChats(getChatDto);
 
     if (search) {
       chats = chats.filter(chat =>
