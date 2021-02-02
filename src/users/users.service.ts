@@ -147,4 +147,5 @@ export class UsersService {
 
     return { countChats, countMessages };
   }
+
 }

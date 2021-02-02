@@ -101,11 +101,11 @@ export class User {
     insert: true,
     default: false,
   })
-  @Column({default: false})
+  @Column({ default: false })
   @ApiProperty()
   public disabled!: boolean;
 
-  @Column({default: false})
+  @Column({ default: false })
   @ApiProperty()
   public privateUser!: boolean;
 
@@ -114,6 +114,12 @@ export class User {
   })
   @ApiProperty()
   public birthdayDate: Date;
+
+  @Column({
+    default: '',
+  })
+  @ApiProperty()
+  public idPwdReset?: string;
 
   @CreateDateColumn({
     name: 'created_at',
@@ -140,5 +146,4 @@ export class User {
   )
   @JoinColumn({ name: 'chat_id' })
   public chat_id: Chat;
-
 }

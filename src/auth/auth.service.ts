@@ -4,7 +4,9 @@ import { compare, hash } from 'bcrypt';
 import { UsersService } from '../users/users.service';
 import { CreateUserDto } from '../users/dto/user.dto';
 import { AuthLoginDto } from './dto/auth-login.dto';
+import { ForgotPasswordDto } from './dto/forgot-password.dto';
 import { User } from '../users/user.entity';
+import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
 export class AuthService {
@@ -57,5 +59,27 @@ export class AuthService {
     createUserDto.password = await hash(createUserDto.password, 10);
 
     return this.usersService.save(createUserDto);
+  }
+
+  public async forgotPassword(
+    forgotPasswordDto: ForgotPasswordDto,
+  ): Promise<string> {
+    if (forgotPasswordDto.type === 'email') {
+      const user = await this.usersService.getUserByEmail(
+        forgotPasswordDto.email,
+      );
+      if (!user) {
+        throw new HttpException('User not found', HttpStatus.BAD_REQUEST);
+      }
+
+      const idPwd = uuidv4();
+
+      user.idPwdReset = idPwd;
+      this.usersService.save(user);
+
+      const generatedLink = `http://${process.env.URL}/forgot-password/${idPwd}`;
+
+      return generatedLink;
+    }
   }
 }

@@ -5,6 +5,7 @@ import { LocalAuthGuard } from './guards/local-auth.guard';
 import { AuthLoginDto } from './dto/auth-login.dto';
 import { CreateUserDto } from '../users/dto/user.dto';
 import { User } from '../users/user.entity';
+import { ForgotPasswordDto } from './dto/forgot-password.dto';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -20,5 +21,12 @@ export class AuthController {
   @Post('register')
   public async register(@Body() createUserDto: CreateUserDto): Promise<User> {
     return this.authService.register(createUserDto);
+  }
+
+  @Post('forgot')
+  public async forgotPassword(
+    @Body() forgotPasswordDto: ForgotPasswordDto,
+  ): Promise<string> {
+    return this.authService.forgotPassword(forgotPasswordDto);
   }
 }
