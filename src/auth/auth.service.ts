@@ -63,7 +63,13 @@ export class AuthService {
 
   public async forgotPassword(
     forgotPasswordDto: ForgotPasswordDto,
-  ): Promise<string> {
+  ): Promise<any> {
+    if (forgotPasswordDto.idPwdReset) {      
+      return await this.usersService.findOneByIdPwd(
+        forgotPasswordDto.idPwdReset,
+      );
+    }
+
     if (forgotPasswordDto.type === 'email') {
       const user = await this.usersService.getUserByEmail(
         forgotPasswordDto.email,
@@ -80,6 +86,26 @@ export class AuthService {
       const generatedLink = `http://${process.env.URL}/forgot-password/${idPwd}`;
 
       return generatedLink;
+    }
+
+    if (forgotPasswordDto.type === 'password') {
+      const user = await this.usersService.findOneByIdPwd(
+        forgotPasswordDto.idPwdReset,
+      );
+
+      if (!forgotPasswordDto.password) {
+        throw new HttpException(
+          'Password not be empty',
+          HttpStatus.BAD_REQUEST,
+        );
+      }
+
+      user.idPwdReset = '';
+      user.password = await hash(forgotPasswordDto.password, 10);
+
+      this.usersService.save(user);
+
+      return 'Password change success';
     }
   }
 }
