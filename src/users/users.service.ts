@@ -97,7 +97,6 @@ export class UsersService {
     }
 
     const user = await this.usersRepository.findOne({ where: { idPwdReset } });
-    console.log(user)
 
     if (!user) {
       throw new HttpException(

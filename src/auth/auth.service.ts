@@ -64,10 +64,8 @@ export class AuthService {
   public async forgotPassword(
     forgotPasswordDto: ForgotPasswordDto,
   ): Promise<any> {
-    if (forgotPasswordDto.idPwdReset) {      
-      return await this.usersService.findOneByIdPwd(
-        forgotPasswordDto.idPwdReset,
-      );
+    if (forgotPasswordDto.idPwdReset) {
+      await this.usersService.findOneByIdPwd(forgotPasswordDto.idPwdReset);
     }
 
     if (forgotPasswordDto.type === 'email') {
