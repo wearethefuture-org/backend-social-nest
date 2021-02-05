@@ -91,6 +91,23 @@ export class UsersService {
     return user;
   }
 
+  public async findOneByIdPwd(idPwdReset: string): Promise<User> {
+    if(!idPwdReset){
+      throw new HttpException('ID not be empty', HttpStatus.BAD_REQUEST)
+    }
+
+    const user = await this.usersRepository.findOne({ where: { idPwdReset } });
+
+    if (!user) {
+      throw new HttpException(
+        'User with this ID not found',
+        HttpStatus.NOT_FOUND,
+      );
+    }
+    
+    return user;
+  }
+
   public async delete(id: number): Promise<User> {
     const user = await this.usersRepository.findOne({
       where: { id },
